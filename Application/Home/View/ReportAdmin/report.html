@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>外拨管理</title>
+		<meta name="description" content="overview &amp; stats" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+
+		<!-- bootstrap & fontawesome -->
+		<link rel="stylesheet" href="__PUBLIC__/assets/css/bootstrap.css" />
+		<link rel="stylesheet" href="__PUBLIC__/assets/css/font-awesome.css" />
+
+		<!-- page specific plugin styles -->
+		<link rel="stylesheet" href="__PUBLIC__/assets/css/jquery-ui.css" />
+		<!-- text fonts -->
+		<link rel="stylesheet" href="__PUBLIC__/assets/css/ace-fonts.css" />
+
+		<!-- ace styles -->
+		<link rel="stylesheet" href="__PUBLIC__/assets/css/ace.css" class="ace-main-stylesheet" id="main-ace-style" />
+
+		<!--[if lte IE 9]>
+			<link rel="stylesheet" href="/assets/css/ace-part2.css" class="ace-main-stylesheet" />
+		<![endif]-->
+
+		<!--[if lte IE 9]>
+		  <link rel="stylesheet" href="/assets/css/ace-ie.css" />
+		<![endif]-->
+		
+		<!-- HTML5shiv and Respond.js for IE8 to support HTML5 elements and media queries -->
+
+		<!--[if lte IE 8]>
+		<script src="/assets/js/html5shiv.js"></script>
+		<script src="/assets/js/respond.js"></script>
+		<![endif]-->
+		<!--[if !IE]> -->
+	<script src="__PUBLIC__/assets/js/jquery.js"></script>
+
+	<!-- <![endif]-->
+	
+	<!--[if IE]>
+<script src="/assets/js/jquery1x.js"></script>
+<![endif]-->
+	</head>
+	<body>
+	<div class="page-content">
+			<h3 class="header smaller lighter blue overflow">外拨报表</h3>
+<input type="hidden" id="tenantId" value="25362" />
+			<div>
+				<div id="dynamic-table_wrapper" class="dataTables_wrapper form-inline no-footer">
+					<div class="row pdb-10">
+						<form>
+							<div class="col-xs-12">
+								<div id="table_filter">
+									<select id="time_type" class="form-control chzn-done pull-left" name="time_type" style="width: 94px;">
+										<option value="1">日报</option>
+										<option value="2">月报</option>
+										<option value="3">自定义</option>
+									</select>
+									<div class="dateDiv pull-left" style="width:170px;" id="one_day_span">
+										<label class="control-label pull-left  no-padding-right mt-6">日期：</label>
+										<div class="input-group pull-left" style="width:126px;">
+											<input type="text" data-date-format="yyyy-mm-dd" data_type="date_search" class="form-control date-picker" id="one_day" name="one_day">
+											<span class="input-group-addon">
+																		<i class="fa fa-calendar bigger-110"></i>
+																	</span>
+										</div>
+									</div>
+									<div class="dateMonthDiv pull-left" style="width:170px;display:none;" id="one_month_span">
+										<label class="control-label pull-left  no-padding-right mt-6">月份：</label>
+										<div class="input-group" style="width:126px;">
+											<input type="text" data-date-format="yyyy-mm" data_type="date_search" class="form-control date-picker" id="one_month" name="one_month">
+											<span class="input-group-addon">
+																		<i class="fa fa-calendar bigger-110"></i>
+																	</span>
+										</div>
+									</div>
+									<div class="rangeDateDiv pull-left" id="some_day_span" style="width:334px;display:none;">
+										<div>
+											<label class="control-label pull-left  no-padding-right mt-6">开始：</label>
+											<div class="input-group pull-left" style="width:126px;">
+												<input type="text"  id="startDate" data_type="date_search" name="startDate" class="form-control date-picker">
+												<span class="input-group-addon">
+																		<i class="fa fa-calendar bigger-110"></i>
+																	</span>
+											</div>
+											<label class="control-label no-padding-right pull-left mt-6">结束：</label>
+											<div class="input-group pull-left" style="width:126px;">
+												<input type="text"  id="endDate" name="endDate" data_type="date_search" class="form-control date-picker">
+												<span class="input-group-addon">
+																		<i class="fa fa-calendar bigger-110"></i>
+																	</span>
+											</div>
+										</div>
+
+									</div>
+									<input type="search" class="form-control pull-left" id="condition" placeholder="联系号码" style="width:100px;">
+									<div class="btn-group">
+										<button id="campaign_sub_btn" class="btn btn-info btn-sm btn-s less_btn" type="button">查询</button>
+
+										<!--<a class="btn btn-sm btn-s btn-info dropdown-toggle" href="#formModal" data-toggle="modal" aria-expanded="false">
+											<span class="ace-icon fa fa-caret-down icon-only"></span>
+										</a>-->
+										<a class="btn btn-info btn-sm btn-s export" href="javascritp:;">XLS导出</a>
+										<a class="btn btn-info btn-sm btn-s chart" href="#chartFormModal" data-toggle="modal">显示/隐藏图表</a>
+									</div>
+									<!-- condition modal -->
+									<div class="modal fade bs-example-modal-sm" id="formModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+										<div class="modal-header">
+											<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+											<h4 class="modal-title" id="myModalLabel">多条件查询</h4>
+										</div>
+										<div class="modal-body">
+											<div class="form-group">
+												<label class="col-sm-3 control-label no-padding-right" for="form-field-1">
+													<label class="middle">活动列表</label>
+												</label>
+												<div class="col-sm-9">
+													<select multiple="" id="campaign_ids_" name="campaign_ids[]" class="chosen-select form-control" data-placeholder="请选择">
+															<option value="71466">王飞201609120958，1395205</option><option value="70979">悦庭201609111340，1381398</option><option value="70978">悦庭201609111337，1381298</option><option value="70302">悦庭201609101340，1380159</option><option value="70297">悦庭201609101337，1350518</option><option value="69544">悦庭201609091456，1385181</option><option value="69540">悦庭201609091453，1385181</option><option value="68077">王飞201609081439，1395178</option><option value="65612">回收201609061831，1381388</option><option value="65279">全职201609061520，1891297</option><option value="65273">全职201609061518，1332770</option><option value="65269">全职201609061514，1891597</option><option value="62936">悦庭201609041342，1538083</option><option value="62935">悦庭201609041340，1531299</option><option value="62933">全职201609041330，1301034</option><option value="62539">全部呼损201609031718</option><option value="61423">全部201609021519，1891597</option><option value="60064">护损201609011541，1891397</option><option value="59340">全职201609010939，1891397</option><option value="58969">全职201608311646，1891386</option><option value="55696">兼职201608281709，1381302回收</option><option value="55692">兼职201608281702，13815850000</option><option value="55298">预测式外拨201608280932</option><option value="54845">兼职201608271419，1385189</option><option value="48353">兼职201608211521 1391397</option><option value="48184">兼职201608211011，1381380</option><option value="48137">悦庭201608210939，18913960000</option><option value="47547">悦庭201608200951，1895100</option><option value="47539">悦庭201608200948，1381388</option><option value="47533">预测式外拨201608200940，1381302</option><option value="46519">兼职201608191016，1391395</option><option value="45967">兼职201608181650 1391382</option><option value="45569">兼职201608181501 1391299</option><option value="45472">兼职201608181425  1381300</option><option value="45226">兼职201608181058。1395201</option><option value="43842">兼职201608170942 1391298</option><option value="43829">兼职201608170940 1380518</option><option value="43772">兼职201608170922 1395191</option><option value="43419">兼职201608161710 ，1391334</option><option value="43411">悦庭201608161703，1395177</option><option value="43409">呼损01608161701，1381388</option><option value="43406">呼损01608161701，151505188</option><option value="42768">兼职201608161415 15105188</option><option value="41064">呼损201608141626</option><option value="41061">呼损201608141625，1385199</option><option value="40924">悦庭201608141418  1381396</option><option value="40740">全职201608141007 1381388</option><option value="40654">201608140900 1385199</option><option value="40381">悦庭201608131556，13901590000</option><option value="40348">悦庭201608131510，1381303</option><option value="40342">悦庭201608131508，1395179</option><option value="40341">悦庭201608131508，1380516</option><option value="40339">悦庭201608131507，1380900</option><option value="40338">悦庭201608131507，1391355</option><option value="40333">悦庭201608131503，1380900</option><option value="40062">悦庭201608131006.1380900</option><option value="40061">悦庭201608131005.1380516</option><option value="40060">悦庭201608131004  1395179</option><option value="40057">悦庭201608131001  1390515.</option><option value="38035">悦庭201608111503，1391470</option><option value="38033">悦庭201608111502，1364515</option><option value="37959">呼损201608111433，再循环</option><option value="37957">呼损201608111433，再循环</option><option value="35245">悦庭201608091451，1390516</option><option value="34774">悦庭201608091031，1380158</option><option value="32854">悦庭201608070947.1395209</option><option value="32814">悦庭201608070918，1377088</option><option value="30359">悦庭201608041132，整理有效号码</option><option value="30355">悦庭201608041128，50秒以上通话</option><option value="30349">悦庭201608041121，外呼50秒以上</option><option value="30339">悦庭201608041117，50秒以上电话</option><option value="30333">悦庭201608041114，50秒以上通话</option><option value="30326">悦庭201608041110，50秒以上电话</option><option value="29989">201608040857.1391398</option><option value="29984">201608040856.1381302</option><option value="29430">悦庭201608031401，1381385</option><option value="28580">悦庭201608021500，呼损1</option><option value="28528">悦庭201608021500，呼损1</option><option value="26505">悦庭201607301342，1391391</option><option value="26504">悦庭201607301341，1391399</option><option value="26393">201607301005，1385185</option><option value="26385">201607300957，1385168</option><option value="26384">201607300955，1390159</option><option value="26383">悦庭201607300954， 1390517</option><option value="25196">悦庭201607281420，1380517</option><option value="25189">悦庭201607281417，1381303</option><option value="24635">预测式外拨201607271645</option><option value="24634">预测式外拨201607271645</option><option value="24600">预测式外拨201607271645</option><option value="24323">悦庭201607271421，1385199</option><option value="24321">悦庭201607271421，1381387</option><option value="24319">悦庭201607271420，1391295</option><option value="24314">悦庭201607271419，1385181</option><option value="24309">悦庭201607271418，1381586</option><option value="24299">悦庭201607271417，1385181</option><option value="24293">悦庭201607271416，1395169</option><option value="23552">万汇城201607261603，1395169</option><option value="23551">万汇城201607261601，1395169</option><option value="23547">万汇城201607261600，1385180</option><option value="23545">万汇城201607261559，1391386</option><option value="22251">万汇城201607241344，1391388</option><option value="22249">万汇城201607241343，1391388</option><option value="22248">万汇城201607241341，1385162</option><option value="22233">万汇城201607241146，1360519</option><option value="21854">万汇城201607231130，1390515</option><option value="21853">万汇城201607231129，1365516</option><option value="21775">万汇城201607231003，1385193</option><option value="21732">万汇城201607230937，1390517</option><option value="21723">万汇城201607230930，1390158</option><option value="21722">万汇城201607230929，1385189</option><option value="21710">201607230912  1390516</option><option value="21265">万汇城201607221156，1322203</option><option value="21262">万汇城201607221156，1899596</option><option value="21261">万汇城201607221155，1770158</option><option value="21259">万汇城201607221153，1390519</option><option value="21258">万汇城201607221151，1381586</option><option value="21255">万汇城201607221149，1381586</option><option value="21247">万汇城201607221148，1870516</option><option value="19935">悦庭201607201547，1855165</option><option value="19931">悦庭201607201544，1395166</option><option value="19930">悦庭201607201543，1395166</option><option value="19929">悦庭201607201542，1893603</option><option value="19923">悦庭201607201540，1826008</option><option value="19917">悦庭201607201538，1826008</option><option value="19915">悦庭201607201537，1826008</option><option value="19620">悦庭201607201013，1891330</option><option value="19617">悦庭201607201012，1826008</option><option value="19613">悦庭201607201010，1377060</option><option value="19607">预测式外拨201607201005</option><option value="19605">预测式外拨201607201005</option><option value="19542">悦庭201607200931，1381383</option><option value="19539">悦庭201607200930，1507788</option><option value="19532">悦庭201607200929，1860619</option><option value="19520">悦庭201607200917，1801388</option><option value="18947">悦庭201607191400，1377088</option><option value="18922">悦庭201607191355，1377088</option><option value="18917">悦庭201607191350，1370516</option><option value="18915">悦庭201607191350，1370516</option><option value="18912">悦庭201607191350，1370516</option><option value="18906">悦庭201607191348，1370516</option><option value="18905">悦庭201607191348，1370516</option><option value="18903">悦庭201607191347，1391291</option><option value="18899">悦庭201607191342，1391291</option><option value="18898">悦庭2016071913421391291</option><option value="18895">悦庭2016071913421391291</option><option value="18891">悦庭2016071913421391291</option><option value="18889">悦庭2016071913401391299</option><option value="17853">201607171426</option><option value="17781">201607171328</option><option value="17693">201607170955</option><option value="17690">201607170952</option><option value="17201">万汇城201607160939，金陵号码段</option><option value="17195">万汇城201607160936，金陵号码段</option><option value="17190">万汇城201607160934，号码段</option><option value="17185">万汇城201607160921，号码段</option><option value="17164">万汇城201607160921，号码段</option><option value="16846">万汇城201607151504，13809030000</option><option value="16380">万汇城201607150925，1590519</option><option value="16181">万汇城201607141715，1595100</option><option value="16178">201607141715</option><option value="15654">万汇城201607141115，1395108</option><option value="15506">万汇城201607140929，1875188</option><option value="15180">预测式外拨201607131606</option><option value="15179">预测式外拨201607131606</option><option value="15084">201607131533</option><option value="15060">201607131519</option><option value="14998">201607131448</option><option value="14997">201607131448</option><option value="14579">201607130933</option><option value="14096">201607121548</option><option value="13996">201607121502万汇城</option><option value="13846">预测式外拨201607121338</option><option value="13559">预测式外拨201607121009</option><option value="12395">201607101521</option><option value="11726">201607090915</option><option value="11724">201607090912</option><option value="11475">201607081538</option><option value="11438">201607081523</option><option value="11435">201607081523</option><option value="11433">201607081523</option><option value="11087">201607081054</option><option value="11086">2016070810:51</option><option value="11084">20160708万汇城</option><option value="10620">201607071629下午2</option><option value="10619">201607071628下午2</option><option value="10598">20160707下午2</option><option value="10283">20160707下午</option><option value="9638">预测式外拨201607061640</option><option value="9637">预测式外拨201607061639</option><option value="9631">预测式外拨201607061631</option><option value="5014">预测式外拨201606291103</option><option value="5002">预测式外拨201606291055</option>
+													</select>
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="col-sm-3 control-label no-padding-right" for="form-field-1">
+													<label class="middle">类型</label>
+												</label>
+												<div class="col-sm-9">
+													<div class="radio inline">
+													<label>
+														<input name="group_or_agent" type="radio" class="ace" id="group_or_agent1" value="1">
+														<span class="lbl"> 坐席组</span>
+													</label>
+												</div>
+												<div class="radio">
+													<label>
+														<input name="group_or_agent" type="radio" class="ace" id="group_or_agent2" value="2">
+														<span class="lbl"> 坐席</span>
+													</label>
+												</div>
+												</div>
+											</div>
+										</div>
+										<div class="modal-footer">
+											<button class="btn btn-sm" data-dismiss="modal" aria-hidden="true" id="close2">取消</button>
+											<button class="btn btn-sm" type="button" onClick="doClear()">重置</button>
+											<button class="btn btn-sm btn-info more_btn" type="button">确定</button>
+										</div>
+									</div>
+									<div id="chartFormModal" class="modal" style="width: 90%; height: 86%; left: 5%; top: 10%; margin: 0px;" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="formModalLabel" aria-hidden="true">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" id="close1">×</button>
+                <h3 id="formModalLabel" class="chartTitle">外拨报表图表</h3>
+              </div>
+              <div class="modal-body" style="max-height: 100%;">
+                <div id="chartdiv" style="width: 100%; overflow: hidden; text-align: left;"><div style="overflow: hidden; position: relative; text-align: left; width: 0px; height: 385px;"><svg version="1.1" style="position: absolute; width: 1025px; height: 309px; left: 0.40625px; top: -0.1875px;"><g><path cs="100,100" d="M0.5,0.5 L1024.5,0.5 L1024.5,308.5 L0.5,308.5 Z" fill="#FFFFFF" stroke="#000000" fill-opacity="0" stroke-width="1" stroke-opacity="0"></path><path cs="100,100" d="M0.5,0.5 L1004.5,0.5 L1004.5,248.5 L0.5,248.5 Z" fill="#FFFFFF" stroke="#000000" fill-opacity="0" stroke-width="1" stroke-opacity="0" transform="translate(0,60)" class="amChartsPlotArea"></path></g><g></g><g></g><g></g><g></g><g></g><g clip-path="url(#AmChartsEl-2)"></g><g></g><g></g><g></g><g></g><g></g><g><g></g></g><g id="balloons"></g><g></g><g></g><clipPath id="AmChartsEl-2"><rect x="0" y="60" width="1004" height="248" rx="0" ry="0" stroke-width="0"></rect></clipPath></svg></div><div class="amChartsLegend" style="overflow: hidden; position: relative; text-align: left; width: 1025px; height: 76px;"><svg version="1.1" style="position: absolute; width: 1025px; height: 385px;"><g transform="translate(0,0)"><path cs="100,100" d="M0.5,0.5 L1004.5,0.5 L1004.5,65.5 L0.5,65.5 Z" fill="#FFFFFF" stroke="#000000" fill-opacity="0" stroke-width="1" stroke-opacity="0"></path><g transform="translate(0,11)"><g cursor="pointer" transform="translate(0,0)"><path cs="100,100" d="M0.5,0.5 L16.5,0.5 L16.5,16.5 L0.5,16.5 Z" fill="#AAB3B3" stroke="#AAB3B3" fill-opacity="1" stroke-width="1" stroke-opacity="1"></path><g><path cs="100,100" d="M3.5,3.5 L13.5,13.5" fill="none" stroke="#FFFFFF" stroke-width="3"></path><path cs="100,100" d="M3.5,13.5 L13.5,3.5" fill="none" stroke="#FFFFFF" stroke-width="3"></path></g><text y="5.5" fill="#AAB3B3" font-family="Verdana" font-size="11" text-anchor="start" transform="translate(21,7)"><tspan y="5.5" x="0">总数</tspan></text><text y="5.5" fill="#AAB3B3" font-family="Verdana" font-size="11" text-anchor="end" transform="translate(112,7)"> </text><rect x="16" y="0" width="96" height="18" rx="0" ry="0" stroke-width="0" stroke="none" fill="#ffffff" fill-opacity="0.005"></rect></g><g cursor="pointer" transform="translate(127,0)"><path cs="100,100" d="M0.5,0.5 L16.5,0.5 L16.5,16.5 L0.5,16.5 Z" fill="#AAB3B3" stroke="#AAB3B3" fill-opacity="1" stroke-width="1" stroke-opacity="1"></path><g><path cs="100,100" d="M3.5,3.5 L13.5,13.5" fill="none" stroke="#FFFFFF" stroke-width="3"></path><path cs="100,100" d="M3.5,13.5 L13.5,3.5" fill="none" stroke="#FFFFFF" stroke-width="3"></path></g><text y="5.5" fill="#AAB3B3" font-family="Verdana" font-size="11" text-anchor="start" transform="translate(21,7)"><tspan y="5.5" x="0">已执行</tspan></text><text y="5.5" fill="#AAB3B3" font-family="Verdana" font-size="11" text-anchor="end" transform="translate(112,7)"> </text><rect x="16" y="0" width="96" height="18" rx="0" ry="0" stroke-width="0" stroke="none" fill="#ffffff" fill-opacity="0.005"></rect></g><g cursor="pointer" transform="translate(253,0)"><path cs="100,100" d="M0.5,0.5 L16.5,0.5 L16.5,16.5 L0.5,16.5 Z" fill="#AAB3B3" stroke="#AAB3B3" fill-opacity="1" stroke-width="1" stroke-opacity="1"></path><g><path cs="100,100" d="M3.5,3.5 L13.5,13.5" fill="none" stroke="#FFFFFF" stroke-width="3"></path><path cs="100,100" d="M3.5,13.5 L13.5,3.5" fill="none" stroke="#FFFFFF" stroke-width="3"></path></g><text y="5.5" fill="#AAB3B3" font-family="Verdana" font-size="11" text-anchor="start" transform="translate(21,7)"><tspan y="5.5" x="0">失败数</tspan></text><text y="5.5" fill="#AAB3B3" font-family="Verdana" font-size="11" text-anchor="end" transform="translate(112,7)"> </text><rect x="16" y="0" width="96" height="18" rx="0" ry="0" stroke-width="0" stroke="none" fill="#ffffff" fill-opacity="0.005"></rect></g><g cursor="pointer" transform="translate(380,0)"><path cs="100,100" d="M0.5,0.5 L16.5,0.5 L16.5,16.5 L0.5,16.5 Z" fill="#AAB3B3" stroke="#AAB3B3" fill-opacity="1" stroke-width="1" stroke-opacity="1"></path><g><path cs="100,100" d="M3.5,3.5 L13.5,13.5" fill="none" stroke="#FFFFFF" stroke-width="3"></path><path cs="100,100" d="M3.5,13.5 L13.5,3.5" fill="none" stroke="#FFFFFF" stroke-width="3"></path></g><text y="5.5" fill="#AAB3B3" font-family="Verdana" font-size="11" text-anchor="start" transform="translate(21,7)"><tspan y="5.5" x="0">超时数</tspan></text><text y="5.5" fill="#AAB3B3" font-family="Verdana" font-size="11" text-anchor="end" transform="translate(112,7)"> </text><rect x="16" y="0" width="96" height="18" rx="0" ry="0" stroke-width="0" stroke="none" fill="#ffffff" fill-opacity="0.005"></rect></g><g cursor="pointer" transform="translate(506,0)"><path cs="100,100" d="M0.5,0.5 L16.5,0.5 L16.5,16.5 L0.5,16.5 Z" fill="#AAB3B3" stroke="#AAB3B3" fill-opacity="1" stroke-width="1" stroke-opacity="1"></path><g><path cs="100,100" d="M3.5,3.5 L13.5,13.5" fill="none" stroke="#FFFFFF" stroke-width="3"></path><path cs="100,100" d="M3.5,13.5 L13.5,3.5" fill="none" stroke="#FFFFFF" stroke-width="3"></path></g><text y="5.5" fill="#AAB3B3" font-family="Verdana" font-size="11" text-anchor="start" transform="translate(21,7)"><tspan y="5.5" x="0">接触数</tspan></text><text y="5.5" fill="#AAB3B3" font-family="Verdana" font-size="11" text-anchor="end" transform="translate(112,7)"> </text><rect x="16" y="0" width="96" height="18" rx="0" ry="0" stroke-width="0" stroke="none" fill="#ffffff" fill-opacity="0.005"></rect></g><g cursor="pointer" transform="translate(633,0)"><path cs="100,100" d="M0.5,0.5 L16.5,0.5 L16.5,16.5 L0.5,16.5 Z" fill="#8A0CCF" stroke="#8A0CCF" fill-opacity="1" stroke-width="1" stroke-opacity="1"></path><g visibility="hidden"><path cs="100,100" d="M3.5,3.5 L13.5,13.5" fill="none" stroke="#FFFFFF" stroke-width="3"></path><path cs="100,100" d="M3.5,13.5 L13.5,3.5" fill="none" stroke="#FFFFFF" stroke-width="3"></path></g><text y="5.5" fill="#000000" font-family="Verdana" font-size="11" text-anchor="start" transform="translate(21,7)"><tspan y="5.5" x="0">拒购数</tspan></text><text y="5.5" fill="#000000" font-family="Verdana" font-size="11" text-anchor="end" transform="translate(112,7)"> </text><rect x="16" y="0" width="96" height="18" rx="0" ry="0" stroke-width="0" stroke="none" fill="#ffffff" fill-opacity="0.005"></rect></g><g cursor="pointer" transform="translate(759,0)"><path cs="100,100" d="M0.5,0.5 L16.5,0.5 L16.5,16.5 L0.5,16.5 Z" fill="#AAB3B3" stroke="#AAB3B3" fill-opacity="1" stroke-width="1" stroke-opacity="1"></path><g><path cs="100,100" d="M3.5,3.5 L13.5,13.5" fill="none" stroke="#FFFFFF" stroke-width="3"></path><path cs="100,100" d="M3.5,13.5 L13.5,3.5" fill="none" stroke="#FFFFFF" stroke-width="3"></path></g><text y="5.5" fill="#AAB3B3" font-family="Verdana" font-size="11" text-anchor="start" transform="translate(21,7)"><tspan y="5.5" x="0">拒访数</tspan></text><text y="5.5" fill="#AAB3B3" font-family="Verdana" font-size="11" text-anchor="end" transform="translate(112,7)"> </text><rect x="16" y="0" width="96" height="18" rx="0" ry="0" stroke-width="0" stroke="none" fill="#ffffff" fill-opacity="0.005"></rect></g><g cursor="pointer" transform="translate(886,0)"><path cs="100,100" d="M0.5,0.5 L16.5,0.5 L16.5,16.5 L0.5,16.5 Z" fill="#c20b98" stroke="#c20b98" fill-opacity="1" stroke-width="1" stroke-opacity="1"></path><g visibility="hidden"><path cs="100,100" d="M3.5,3.5 L13.5,13.5" fill="none" stroke="#FFFFFF" stroke-width="3"></path><path cs="100,100" d="M3.5,13.5 L13.5,3.5" fill="none" stroke="#FFFFFF" stroke-width="3"></path></g><text y="5.5" fill="#000000" font-family="Verdana" font-size="11" text-anchor="start" transform="translate(21,7)"><tspan y="5.5" x="0">预购数</tspan></text><text y="5.5" fill="#000000" font-family="Verdana" font-size="11" text-anchor="end" transform="translate(112,7)"> </text><rect x="16" y="0" width="96" height="18" rx="0" ry="0" stroke-width="0" stroke="none" fill="#ffffff" fill-opacity="0.005"></rect></g><g cursor="pointer" transform="translate(0,28)"><path cs="100,100" d="M0.5,0.5 L16.5,0.5 L16.5,16.5 L0.5,16.5 Z" fill="#AAB3B3" stroke="#AAB3B3" fill-opacity="1" stroke-width="1" stroke-opacity="1"></path><g><path cs="100,100" d="M3.5,3.5 L13.5,13.5" fill="none" stroke="#FFFFFF" stroke-width="3"></path><path cs="100,100" d="M3.5,13.5 L13.5,3.5" fill="none" stroke="#FFFFFF" stroke-width="3"></path></g><text y="5.5" fill="#AAB3B3" font-family="Verdana" font-size="11" text-anchor="start" transform="translate(21,7)"><tspan y="5.5" x="0">待访数</tspan></text><text y="5.5" fill="#AAB3B3" font-family="Verdana" font-size="11" text-anchor="end" transform="translate(112,7)"> </text><rect x="16" y="0" width="96" height="18" rx="0" ry="0" stroke-width="0" stroke="none" fill="#ffffff" fill-opacity="0.005"></rect></g><g cursor="pointer" transform="translate(127,28)"><path cs="100,100" d="M0.5,0.5 L16.5,0.5 L16.5,16.5 L0.5,16.5 Z" fill="#37a30e" stroke="#37a30e" fill-opacity="1" stroke-width="1" stroke-opacity="1"></path><g visibility="hidden"><path cs="100,100" d="M3.5,3.5 L13.5,13.5" fill="none" stroke="#FFFFFF" stroke-width="3"></path><path cs="100,100" d="M3.5,13.5 L13.5,3.5" fill="none" stroke="#FFFFFF" stroke-width="3"></path></g><text y="5.5" fill="#000000" font-family="Verdana" font-size="11" text-anchor="start" transform="translate(21,7)"><tspan y="5.5" x="0">成交数</tspan></text><text y="5.5" fill="#000000" font-family="Verdana" font-size="11" text-anchor="end" transform="translate(112,7)"> </text><rect x="16" y="0" width="96" height="18" rx="0" ry="0" stroke-width="0" stroke="none" fill="#ffffff" fill-opacity="0.005"></rect></g></g></g></svg></div></div>
+              </div>
+            </div>
+								</div>
+						</form>
+						</div>
+					</div>
+					<div class="table1">
+						<div>
+							<table id="reportContent" class="table dataTable table-striped table-bordered table-hover">
+								<thead>
+							    <tr>
+							      <th><div>名称</div></th>
+							      <th><div>总数</div></th>
+							      <th><div>已执行</div></th>
+							      <th><div>执行率</div></th>
+							      <th><div>失败数</div></th>
+							      <th><div>失败率</div></th>
+							      <th><div>超时数</div></th>
+							      <th><div>超时率</div></th>
+							      <th><div>接触数</div></th>
+							      <th><div>接触率</div></th>     
+							     <!--  <th><div>意向数</div></th>    
+							     <th><div>意向率</div></th>-->
+							      <th><div>操作</div></th>
+							    </tr>
+							    </thead>
+    <tbody id="content" style="word-break: break-all;">
+    </tbody>
+							</table>
+							<div id="dr-pagination" class="flickr_pagination no_pagination"><div class="pagination"><span style="padding-left:8px;color:#a9a9a9;">总条数 0</span></div></div>
+						</div>
+						
+					</div>
+
+				</div>
+			</div>
+		</div>
+		<style>
+			#formModal .form-group{margin-bottom:10px;}
+			#formModal .form-group .control-label{margin-top:5px;}
+			#formModal .form-group .radio{margin:4px 14px 0 0;}
+		</style>
+		<input type="hidden" id="maxRatio" value="2"/>
+		<div class="modal fade bs-example-modal-sm" id="popModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+				<form id="formAdd" action="" method="post" onsubmit="return false">
+					<input type="hidden" id="transferId" name="transferId" value=""/>
+					<input type="hidden" id="submitType" name="submitType" value="0"/>
+					<div class="modal-header">
+											<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+											<h4 class="modal-title" id="numberModalLabel">号码回收</h4>
+										</div>
+										<div class="modal-body" style="overflow:auto;zoom:1;">
+											<div class="form-group">
+												<label class="col-sm-2 control-label no-padding-right" for="form-field-1">
+													<label class="middle">任务名称</label>
+												</label>
+												<div class="col-sm-9">
+													<input type="text" class="form-control" name="name" value="预测式外拨201609121927"/>
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="col-sm-2 control-label no-padding-right" for="form-field-1" style="margin-top:6px;">
+													<label class="middle">选择号码</label>
+												</label>
+												<div class="col-sm-9">
+													<div class="radio inline">
+													<label>
+														<input name="failType" type="radio" class="ace" id="group_or_agent1" value="0">
+														<span class="lbl"> 仅呼损号码</span>
+													</label>
+												</div>
+												<div class="radio inline">
+													<label>
+														<input name="failType" type="radio" class="ace" id="group_or_agent2" value="1">
+														<span class="lbl"> 仅失败号码</span>
+													</label>
+												</div>
+												<!--<div class="radio inline">
+													<label>
+														<input name="failType" type="radio" class="ace" id="group_or_agent2" value="2">
+														<span class="lbl"> 无意向号码</span>
+													</label>
+												</div>
+												<div class="radio inline">
+													<label>
+														<input name="failType" type="radio" class="ace" id="group_or_agent2" value="3">
+														<span class="lbl"> 有意向号码</span>
+													</label>
+												</div>-->
+												<div class="radio inline">
+													<label>
+														<input name="failType" type="radio" class="ace" id="group_or_agent2" value="4">
+														<span class="lbl">所有</span>
+													</label>
+												</div>
+												</div>
+											</div>
+											<p id="tips">注：号码回收将上述号码重新分配给原始外拨任务的执行人，并将采用相同的配置，失败号码包含无人接听的号码及无效的号码。</p>
+											<a href="#" class="moreOption">更多选项</a>
+											<div class="moreDiv" style="display:none;">
+											<div class="form-group">
+												<div class="col-sm-6">
+													<label class="col-sm-12 control-label no-padding-right" for="form-field-1" style="font-size:14px;">
+													座席组
+												</label>
+												<div class="col-sm-12">
+													<select class="form-control" name="agentGroupId">
+														<option value="543">默认坐席组</option><option value="2714">悦庭销售一组</option>
+													</select>
+												</div>
+												</div>
+												<div class="col-sm-6">
+													<label class="col-sm-12 control-label no-padding-right" for="form-field-1" style="font-size:14px;">
+													负责人
+												</label>
+												<div class="col-sm-12">
+													<select class="form-control" name="ownerId">
+														<option value="6062">王明飞</option><option value="6063">赵安琪</option><option value="6064">兼职1003</option><option value="6065">兼职1004</option><option value="6066">柳明亮</option><option value="6067">王春梅</option><option value="6068">卢莹</option><option value="6069">葛云</option><option value="6070">兼职1009</option><option value="6071">emp1010</option><option value="6072">兼职1011</option><option value="6073">emp1012</option><option value="6074">兼职1013</option><option value="6075">兼职1014</option><option value="6076">兼职1015</option><option value="6077">兼职1016</option><option value="6078">兼职1017</option><option value="6079">兼职1018</option><option value="6080">兼职1019</option><option value="6081">兼职1020</option><option value="32371">emp1021</option><option value="32372">emp1022</option><option value="32373">行政招聘</option>
+													</select>
+												</div>
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="col-sm-2 control-label no-padding-right" for="form-field-1" style="margin-top:6px;">
+													<label class="middle"><i class="red">*</i>外显号码</label>
+												</label>
+												<div class="col-sm-9">
+													<div class="checkbox inline">
+													<label>
+														<input name="numberIds" type="checkbox" class="ace"  showNumber="true" value="15366123165"><span class="lbl">15366123165</span>
+													</label>	
+													</div>																
+													<div class="checkbox inline">
+													<label>
+														<input name="numberIds" type="checkbox" disabled="true" showNumber="true" class="ace"  value="15366123665"><span class="lbl"> 15366123665（不可用）<a href="">立即验证</a></span>
+													</label>	
+													</div>																
+													<div class="checkbox inline">
+													<label>
+														<input name="numberIds" type="checkbox" disabled="true" showNumber="true" class="ace"  value="15380939836"><span class="lbl"> 15380939836（不可用）<a href="">立即验证</a></span>
+													</label>	
+													</div>																
+													<div class="checkbox inline">
+													<label>
+														<input name="numberIds" type="checkbox" disabled="true" showNumber="true" class="ace"  value="15365136229"><span class="lbl"> 15365136229（不可用）<a href="">立即验证</a></span>
+													</label>	
+													</div>																
+													<div class="checkbox inline">
+													<label>
+														<input name="numberIds" type="checkbox" class="ace"  showNumber="true" value="02582292275"><span class="lbl">02582292275</span>
+													</label>	
+													</div>																
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="col-sm-2 control-label no-padding-right" for="form-field-1">
+													<label class="middle">外拨比例</label>
+												</label>
+												<div class="col-sm-9 overflow">
+													<input placeholder="" class="col-xs-12 col-sm-12 " id="ratio" maxlength="4" name="ratio"  size="5" type="text" value="">										
+												</div>
+											</div>
+											</div>
+										</div>
+										
+										
+										
+										<div class="modal-footer">
+											<button class="btn btn-sm" data-dismiss="modal" aria-hidden="true" id="close2">取消</button>
+											<button class="btn btn-sm btn-info" type="submit">创建</button>
+										</div>
+										
+									</form>
+									</div>
+  
+	</body>
+	<!-- basic scripts -->
+
+	
+	<script src="__PUBLIC__/assets/js/bootstrap.js"></script>
+	<script src="__PUBLIC__/assets/js/jquery-ui.js"></script>
+	<!-- page specific plugin scripts -->
+	<script src="__PUBLIC__/assets/js/jquery-ui.custom.js"></script>
+	<script src="__PUBLIC__/assets/js/jquery.ui.touch-punch.js"></script>
+	<!--<script src="/assets/assets/js/ace/elements.aside.js"></script>-->
+
+
+</html><!-- art dialog -->
+		<link rel="stylesheet" href="__PUBLIC__/assets/css/aero.css" /> 
+		<link rel="stylesheet" href="__PUBLIC__/assets/css/chosen.css" />
+		<link rel="stylesheet" href="__PUBLIC__/assets/css/ace-fonts.css" />
+		<link rel="stylesheet" href="__PUBLIC__/assets/css/datepicker.css" />
+		<!-- ace styles -->
+		<link rel="stylesheet" href="__PUBLIC__/assets/css/ace.css" class="ace-main-stylesheet" id="main-ace-style" />
+		<link rel="stylesheet" href="__PUBLIC__/assets/css/popup.css" type="text/css" />
+		<link rel="stylesheet" href="__PUBLIC__/assets/css/define.css" type="text/css" />
+		
+		<script src="__PUBLIC__/assets/js/chosen.jquery.js"></script>
+		<script src="__PUBLIC__/assets/js/ace/ace.js"></script>
+		<script src="__PUBLIC__/assets/js/chosen.jquery.js"></script>
+		<script src="__PUBLIC__/assets/js/date-time/bootstrap-datepicker.js"></script>
+		<script src="__PUBLIC__/assets/js/export2excel/Base64.js"></script>
+		<script src="__PUBLIC__/assets/js/export2excel/e2e-0.8.js"></script>
+		<script src="__PUBLIC__/assets/ty_js/agentstatistics/public.js"></script>
+		<script src="__PUBLIC__/assets/ty_js/agentstatistics/report.js"></script>
+		<script src="__PUBLIC__/assets/ty_js/agentstatistics/amcharts.js"></script>
+		<script src="__PUBLIC__/assets/js/fuelux/fuelux.spinner.js"></script>
+		<script src="__PUBLIC__/assets/js/ace/elements.spinner.js"></script>
+		<script src="__PUBLIC__/assets/ty_js/agentstatistics/rails.validations.js"></script>
+  		<script src="__PUBLIC__/assets/ty_js/agentstatistics/rails.validations.simple_form.js"></script>
+  		<script src="__PUBLIC__/assets/ty_js/agentstatistics/rails.validations.custom.js"></script>
+  		<script src="__PUBLIC__/assets/ty_js/agentstatistics/artDialog.min.js"></script>
+  		<script src="__PUBLIC__/assets/ty_js/agentstatistics/artDialog.plugins.min.js"></script> 	
+  		<script src="__PUBLIC__/assets/js/jquery.validate.js"></script>	
+		<script src="__PUBLIC__/assets/ty_js/campaigns/report.js"></script>

@@ -1,0 +1,143 @@
+[ 2018-06-05T23:59:13+08:00 ] ::1 /tytx1/index.php/Home/Index/index.html
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000035s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001162s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.002525s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.002678s ]
+
+[ 2018-06-05T23:59:13+08:00 ] ::1 /tytx1/index.php/Home/login/login.html
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000032s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001023s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.002310s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.002450s ]
+INFO: [ view_parse ] --START--
+INFO: [ template_filter ] --START--
+INFO: Run Behavior\ContentReplaceBehavior [ RunTime:0.000093s ]
+INFO: [ template_filter ] --END-- [ RunTime:0.000232s ]
+INFO: Run Behavior\ParseTemplateBehavior [ RunTime:0.018664s ]
+INFO: [ view_parse ] --END-- [ RunTime:0.018845s ]
+INFO: [ view_filter ] --START--
+INFO: Run Behavior\WriteHtmlCacheBehavior [ RunTime:0.002191s ]
+INFO: [ view_filter ] --END-- [ RunTime:0.002322s ]
+INFO: [ app_end ] --START--
+INFO: Run Behavior\ShowPageTraceBehavior [ RunTime:0.002352s ]
+INFO: [ app_end ] --END-- [ RunTime:0.002481s ]
+
+[ 2018-06-05T23:59:13+08:00 ] ::1 /tytx1/index.php/Home/login/loginImage.html
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000031s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001001s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.003008s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.003236s ]
+INFO: [ app_end ] --START--
+INFO: Run Behavior\ShowPageTraceBehavior [ RunTime:0.001534s ]
+INFO: [ app_end ] --END-- [ RunTime:0.001681s ]
+
+[ 2018-06-05T23:59:31+08:00 ] ::1 /tytx1/index.php/Home/login/login
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000032s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001013s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001883s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.002014s ]
+NOTIC: [8192] mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead C:\wamp\www\tytx1\ThinkPHP\Library\Think\Db\Driver\Mysql.class.php 第 52 行.
+SQL: SHOW COLUMNS FROM `tytx_admin` [ RunTime:0.027661s ]
+SQL: SELECT `tenantCode` FROM `tytx_admin` WHERE ( `tenantCode` = 'root' ) LIMIT 1   [ RunTime:0.000453s ]
+
+[ 2018-06-05T23:59:39+08:00 ] ::1 /tytx1/index.php/Home/login/login
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000030s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000865s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001846s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001979s ]
+NOTIC: [8192] mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead C:\wamp\www\tytx1\ThinkPHP\Library\Think\Db\Driver\Mysql.class.php 第 52 行.
+SQL: SHOW COLUMNS FROM `tytx_admin` [ RunTime:0.011487s ]
+SQL: SELECT `tenantCode` FROM `tytx_admin` WHERE ( `tenantCode` = 'root' ) LIMIT 1   [ RunTime:0.000323s ]
+SQL: SELECT `id`,`agentName`,`password` FROM `tytx_admin` WHERE ( `agentName` = '123' ) LIMIT 1   [ RunTime:0.000279s ]
+
+[ 2018-06-05T23:59:39+08:00 ] ::1 /tytx1/index.php/Home/Index/index.html
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000034s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000884s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.002474s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.002680s ]
+NOTIC: [2] unlink(./Application/Runtime/Temp/d4f5c2c94881b8db27f83be1703bfbef.php): No such file or directory C:\wamp\www\tytx1\ThinkPHP\Library\Think\Cache\Driver\File.class.php 第 157 行.
+NOTIC: [8192] mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead C:\wamp\www\tytx1\ThinkPHP\Library\Think\Db\Driver\Mysql.class.php 第 52 行.
+SQL: select * from tytx_privilege [ RunTime:0.000523s ]
+SQL: SHOW COLUMNS FROM `tytx_system` [ RunTime:0.011585s ]
+SQL: SELECT * FROM `tytx_system` WHERE ( `id` = 1 ) LIMIT 1   [ RunTime:0.000759s ]
+SQL: SHOW COLUMNS FROM `tytx_username` [ RunTime:0.013299s ]
+SQL: SELECT * FROM `tytx_username` WHERE ( `id` = 1 ) LIMIT 1   [ RunTime:0.000463s ]
+INFO: [ view_parse ] --START--
+INFO: [ template_filter ] --START--
+INFO: Run Behavior\ContentReplaceBehavior [ RunTime:0.000245s ]
+INFO: [ template_filter ] --END-- [ RunTime:0.000398s ]
+INFO: Run Behavior\ParseTemplateBehavior [ RunTime:0.034115s ]
+INFO: [ view_parse ] --END-- [ RunTime:0.034352s ]
+INFO: [ view_filter ] --START--
+INFO: Run Behavior\WriteHtmlCacheBehavior [ RunTime:0.002488s ]
+INFO: [ view_filter ] --END-- [ RunTime:0.002650s ]
+INFO: [ app_end ] --START--
+INFO: Run Behavior\ShowPageTraceBehavior [ RunTime:0.001979s ]
+INFO: [ app_end ] --END-- [ RunTime:0.002120s ]
+
+[ 2018-06-05T23:59:39+08:00 ] ::1 /tytx1/index.php/Home/Index/welcome.html
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000040s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001041s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001372s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001533s ]
+INFO: [ view_parse ] --START--
+INFO: [ template_filter ] --START--
+INFO: Run Behavior\ContentReplaceBehavior [ RunTime:0.000092s ]
+INFO: [ template_filter ] --END-- [ RunTime:0.000246s ]
+INFO: Run Behavior\ParseTemplateBehavior [ RunTime:0.013698s ]
+INFO: [ view_parse ] --END-- [ RunTime:0.013875s ]
+INFO: [ view_filter ] --START--
+INFO: Run Behavior\WriteHtmlCacheBehavior [ RunTime:0.001989s ]
+INFO: [ view_filter ] --END-- [ RunTime:0.002139s ]
+INFO: [ app_end ] --START--
+INFO: Run Behavior\ShowPageTraceBehavior [ RunTime:0.001304s ]
+INFO: [ app_end ] --END-- [ RunTime:0.001441s ]
+
+[ 2018-06-05T23:59:52+08:00 ] ::1 /tytx1/index.php/Home/Go/showInfo.html
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000035s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001187s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.002751s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.002949s ]
+NOTIC: [8192] mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead C:\wamp\www\tytx1\ThinkPHP\Library\Think\Db\Driver\Mysql.class.php 第 52 行.
+SQL: select count(*) has from tytx_privilege where module_name="Home"AND controller_name="Go" AND action_name="showInfo" [ RunTime:0.000372s ]
+SQL: SHOW COLUMNS FROM `tytx_calllog` [ RunTime:0.015163s ]
+NOTIC: [8] Undefined index: time_type C:\wamp\www\tytx1\Application\Home\Controller\GoController.class.php 第 57 行.
+NOTIC: [8] Undefined index: mobile C:\wamp\www\tytx1\Application\Home\Controller\GoController.class.php 第 100 行.
+NOTIC: [8] Undefined index: userId C:\wamp\www\tytx1\Application\Home\Controller\GoController.class.php 第 104 行.
+NOTIC: [8] Undefined index: minTime C:\wamp\www\tytx1\Application\Home\Controller\GoController.class.php 第 108 行.
+NOTIC: [8] Undefined index: maxTime C:\wamp\www\tytx1\Application\Home\Controller\GoController.class.php 第 109 行.
+NOTIC: [8] Undefined index: state C:\wamp\www\tytx1\Application\Home\Controller\GoController.class.php 第 122 行.
+NOTIC: [8] Undefined index: mode C:\wamp\www\tytx1\Application\Home\Controller\GoController.class.php 第 125 行.
+NOTIC: [8] Undefined index: output C:\wamp\www\tytx1\Application\Home\Controller\GoController.class.php 第 128 行.
+SQL: SELECT COUNT(*) AS tp_count FROM `tytx_calllog` LIMIT 1   [ RunTime:0.000295s ]
+SQL: SELECT * FROM `tytx_calllog` ORDER BY calltime desc LIMIT 0,10   [ RunTime:0.000431s ]
+SQL: SELECT distinct tablename FROM `tytx_calllog`  [ RunTime:0.001078s ]
+INFO: [ view_parse ] --START--
+INFO: [ template_filter ] --START--
+INFO: Run Behavior\ContentReplaceBehavior [ RunTime:0.000278s ]
+INFO: [ template_filter ] --END-- [ RunTime:0.000432s ]
+INFO: Run Behavior\ParseTemplateBehavior [ RunTime:0.027844s ]
+INFO: [ view_parse ] --END-- [ RunTime:0.028011s ]
+INFO: [ view_filter ] --START--
+INFO: Run Behavior\WriteHtmlCacheBehavior [ RunTime:0.002208s ]
+INFO: [ view_filter ] --END-- [ RunTime:0.002337s ]
+INFO: [ app_end ] --START--
+INFO: Run Behavior\ShowPageTraceBehavior [ RunTime:0.002904s ]
+INFO: [ app_end ] --END-- [ RunTime:0.003121s ]
+

@@ -1,0 +1,1 @@
+$(function(){$("#selfRecharge").click(function(){$.ajax({type:"GET",url:"/admin/users/getSelfRechargeUrl",data:{},dataType:"json",async:false,success:function(A){top.doClick(this,"9999","selfRecharge","自助充值",A.object.rechargeUrl)},error:function(A){top.art.alert("数据有误，请刷新页面重试！")},})})});

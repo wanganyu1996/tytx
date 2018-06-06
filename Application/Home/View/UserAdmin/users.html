@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>租户管理</title>
+		<meta name="description" content="overview &amp; stats" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+
+		<!-- bootstrap & fontawesome -->
+		<link rel="stylesheet" href="__PUBLIC__/assets/css/bootstrap.css" />
+		<link rel="stylesheet" href="__PUBLIC__/assets/css/font-awesome.css" />
+
+		<!-- page specific plugin styles -->
+		<link rel="stylesheet" href="__PUBLIC__/assets/css/jquery-ui.css" />
+		<!-- text fonts -->
+		<link rel="stylesheet" href="__PUBLIC__/assets/css/ace-fonts.css" />
+        <link rel="stylesheet" href="__PUBLIC__/assets/css/chosen.css" />
+		<!-- ace styles -->
+		<link rel="stylesheet" href="__PUBLIC__/assets/css/ace.css" class="ace-main-stylesheet" id="main-ace-style" />
+
+		<!--[if lte IE 9]>
+			<link rel="stylesheet" href="/assets/css/ace-part2.css" class="ace-main-stylesheet" />
+		<![endif]-->
+
+		<!--[if lte IE 9]>
+		  <link rel="stylesheet" href="/assets/css/ace-ie.css" />
+		<![endif]-->
+			<link rel="stylesheet" href="__PUBLIC__/assets/css/popup.css" type="text/css" />
+	<link rel="stylesheet" href="__PUBLIC__/assets/css/define.css" type="text/css" />
+	<link rel="stylesheet" href="__PUBLIC__/assets/css/aero.css" />
+	<style>
+	
+	  #dynamic-table .btn {
+        margin-top: 2px;
+        margin-bottom: 2px;
+    }
+    .btnMore{
+	    	color:#6fb3e0;
+	    	cursor:pointer;
+	    }
+</style>
+
+		<!-- HTML5shiv and Respond.js for IE8 to support HTML5 elements and media queries -->
+
+		<!--[if lte IE 8]>
+		<script src="/assets/js/html5shiv.js"></script>
+		<script src="/assets/js/respond.js"></script>
+		<![endif]-->
+		<!--[if !IE]> -->
+	<script src="__PUBLIC__/assets/js/jquery.js"></script>
+
+	<!-- <![endif]-->
+	
+	<!--[if IE]>
+<script src="/assets/js/jquery1x.js"></script>
+<![endif]-->
+	</head>
+	<body>
+	<div class="page-content">
+<input type="hidden" id="tanentId" value="25362"/>
+<h3 class="header smaller lighter blue overflow">用户管理<a href="javascript:checkCreate()" class="btn btn-success pull-right btn-sm">添加用户</a></h3>
+<div>
+	<div id="dynamic-table_wrapper" class="dataTables_wrapper form-inline no-footer">
+		<div class="row pdb-10">
+			<div class="col-xs-6">
+			<form method="" action="" id="userForm">
+				<div id="table_filter">
+					<select class="form-control pull-left" name="status">
+						<option value="" >所有状态</option>
+						<option value="true" >已启用</option>
+						<option value="false" >已注销</option>
+					</select>
+					<input type="search" class="form-control pull-left" id="condition" placeholder="员工姓名/工号" name="name" value="">
+                    <input type="hidden" id="pageSize" name="pageSize" value="20"/>
+					<div class="btn-group">
+						<button class="btn btn-info btn-sm btn-s" type="submit">查询</button>
+					</div>
+                </div>
+				</div>
+				</form>
+					<div class="btn-group" style="float:right">
+                        <button aria-expanded="false" class="btn-s btn btn-info btn-sm dropdown-toggle"
+                                data-toggle="dropdown">批量操作<span class="ace-icon fa fa-caret-down icon-on-right"></span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-info dropdown-menu-right">
+                            <li><a href="javascript:void(0)" id="batch">个性化外显号码</a></li>
+                            <li><a onclick="updateSomeMonthStatus(false,this)" > 月底禁用</a></li>
+                            <li><a onclick="updateSomeMonthStatus(true,this)" > 取消月底禁用</a></li>
+                        </ul>
+                    </div>
+			</div>
+		</div>
+		<div>
+		<div class="modal fade bs-example-modal-sm" id="pwdModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+		<form id="formAdd" class="" role="form" action=""  method="post">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+				<h4 class="modal-title" id="myModalLabel">修改个性化外显号码</h4>
+			</div>
+			<div class="modal-body">
+				<div class="form-group" style="height:30px;">
+					<input type="hidden" name="pstn" id="pstn">
+					<label class="col-sm-3 control-label no-padding-right" for="form-field-1" style="font-size:14px;margin-top:5px;"> 个性化外显号码 </label>
+					<div class="col-sm-5">
+						<select class="chosen-select form-control" data-placeholder="" name="pstnSelect" id="pstnSelect">
+							<option value="请选择">请选择</option>
+									<option value="15366123165">15366123165</option>
+									<option value="15366123665">15366123665</option>
+									<option value="15380939836">15380939836</option>
+									<option value="15365136229">15365136229</option>
+									<option value="02582292275">02582292275</option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-info btn-sm" type="submit" id="infoUpdate" onclick="return checkSelectedVal()">保存</button>
+				<button class="btn btn-sm" data-dismiss="modal" aria-hidden="true" id="close2">取消</button>
+			</div>
+		</form>
+		</div>
+		<div class="modal fade bs-example-modal-sm" id="formModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+				<h4 class="modal-title" id="myModalLabel">套餐详情</h4>
+			</div>
+			<div class="modal-body">
+				<p class="billBlance">套餐余额：<span class="billFee"></span>元，<span class="billMinute"></span>分钟</p>
+				<p class="beginOfMonthInfo">月初额度：<span class="beginOfMonthFee"></span></p>
+				<p >当月消费：已经呼叫<span class="minu"></span>分钟，已经扣费<span class="cash"></span>元</p>
+				<p class="currentMonth">当月套餐：<span class="curName"></span></p>
+				<p class="nextMonth">下月套餐：<span class="nextName"></span></p>
+				<p class="companyInfo">企业套餐：<span class="companyName"></span></p>
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-sm" data-dismiss="modal" aria-hidden="true" id="close2">关闭</button>
+				
+			</div>
+		</div>
+		<table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" >
+				<thead>
+					<tr role="row">
+						<th class="text-center">
+                            <div class="checkbox">
+                                <label>
+                                    <input name="" type="checkbox" id="all" class="ace" value="1"
+                                           id="tenant_info_is_third_net">
+                                    <span class="lbl"></span>
+                                </label>
+                            </div>
+                        </th>
+						<th class="" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">员工工号</th>
+						<th tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">员工姓名</th>
+						<th tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">联系号码</th>
+						<th tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">个性外显号码</th>
+						<th tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">分机号</th>
+						<th tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">坐席套餐</th>
+						<th tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">话机密码</th>
+						<th class="" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">用户状态</th>
+						<th class="" rowspan="1" colspan="1" aria-label="">操作</th>
+					</tr>
+				</thead>
+				<tbody>
+						<tr role="row" class="odd">
+							<td class="text-center">
+			                    <div class="checkbox">
+			                        <label>
+			                            <input name="" type="checkbox" class="ace" value="1"
+			                                   id="tenant_info_is_third_net" data-id="6062">
+			                            <span class="lbl"></span>
+			                        </label>
+			                    </div>
+			                </td>
+							<td>emp1001</td>
+							<td>王明飞</td>
+							<td>13888888888</td>
+							<td>15366123165</td>
+							<td>1001</td>
+							<td style="position:relative;">
+								
+											当月套餐3001
+										<span onclick="chargedetail(25362,1001,3001,null,6100)" class="btnMore">更多</span>
+								
+							</td>
+							<td>
+							255625
+							</td>
+							<td>
+								
+								<span class="label label-lg label-success arrowed-right">已启用</span>
+							</td>
+							<td>
+								<a href="" class="btn btn-xs btn-info">查看</a>
+								<a href="" class="btn btn-xs btn-info">修改资料</a>
+								<a href="" class="btn btn-xs btn-info">修改密码</a>
+<a href="javascript:void(0);" onclick="userLogin(6062)" class="btn btn-xs btn-info">登录</a>	
+		                            	<a 
+		                                   onclick="updateMonthStatus(1001,25362,true,this)"
+		                                   type="hidden" class="btn btn-xs btn-info month-nostauts hide" >取消月底禁用</a>
+		                                   
+		                            	<a 
+		                                   onclick="updateMonthStatus(1001,25362,false,this)"
+		                                   class="btn btn-xs btn-danger month-stauts" >月底禁用</a>
+							</td>
+						</tr>
+						<tr role="row" class="odd">
+							<td class="text-center">
+			                    <div class="checkbox">
+			                        <label>
+			                            <input name="" type="checkbox" class="ace" value="1"
+			                                   id="tenant_info_is_third_net" data-id="6063">
+			                            <span class="lbl"></span>
+			                        </label>
+			                    </div>
+			                </td>
+							<td>emp1002</td>
+							<td>赵安琪</td>
+							<td>13888888888</td>
+							<td>15366123165</td>
+							<td>1002</td>
+							<td style="position:relative;">
+								
+											当月套餐3001
+										<span onclick="chargedetail(25362,1002,3001,null,6100)" class="btnMore">更多</span>
+								
+							</td>
+							<td>
+							255625
+							</td>
+							<td>
+								
+								<span class="label label-lg label-success arrowed-right">已启用</span>
+							</td>
+							<td>
+								<a href="" class="btn btn-xs btn-info">查看</a>
+								<a href="" class="btn btn-xs btn-info">修改资料</a>
+								<a href="" class="btn btn-xs btn-info">修改密码</a>
+<a href="javascript:void(0);" onclick="userLogin(6063)" class="btn btn-xs btn-info">登录</a>	
+		                            	<a 
+		                                   onclick="updateMonthStatus(1002,25362,true,this)"
+		                                   type="hidden" class="btn btn-xs btn-info month-nostauts hide" >取消月底禁用</a>
+		                                   
+		                            	<a 
+		                                   onclick="updateMonthStatus(1002,25362,false,this)"
+		                                   class="btn btn-xs btn-danger month-stauts" >月底禁用</a>
+							</td>
+						</tr>
+						<tr role="row" class="odd">
+							<td class="text-center">
+			                    <div class="checkbox">
+			                        <label>
+			                            <input name="" type="checkbox" class="ace" value="1"
+			                                   id="tenant_info_is_third_net" data-id="6064">
+			                            <span class="lbl"></span>
+			                        </label>
+			                    </div>
+			                </td>
+							<td>emp1003</td>
+							<td>兼职1003</td>
+							<td>13888888888</td>
+							<td>15366123665</td>
+							<td>1003</td>
+							<td style="position:relative;">
+								
+											企业套餐：6100
+										<span onclick="chargedetail(25362,1003,null,null,6100)" class="btnMore">更多</span>
+								
+							</td>
+							<td>
+							255625
+							</td>
+							<td>
+								
+								<span class="label label-lg label-success arrowed-right">已启用</span>
+							</td>
+							<td>
+								<a href="" class="btn btn-xs btn-info">查看</a>
+								<a href="" class="btn btn-xs btn-info">修改资料</a>
+								<a href="" class="btn btn-xs btn-info">修改密码</a>
+<a href="javascript:void(0);" onclick="userLogin(6064)" class="btn btn-xs btn-info">登录</a>	
+		                                <a 
+		                                   onclick="updateMonthStatus(1003,25362,true,this)"
+		                                   class="btn btn-xs btn-info month-nostauts" >取消月底禁用</a>
+		                                   
+		                                <a 
+		                                   onclick="updateMonthStatus(1003,25362,false,this)"
+		                                    class="btn btn-xs btn-danger month-stauts hide" >月底禁用</a>
+							</td>
+						</tr>
+						<tr role="row" class="odd">
+							<td class="text-center">
+			                    <div class="checkbox">
+			                        <label>
+			                            <input name="" type="checkbox" class="ace" value="1"
+			                                   id="tenant_info_is_third_net" data-id="6065">
+			                            <span class="lbl"></span>
+			                        </label>
+			                    </div>
+			                </td>
+							<td>emp1004</td>
+							<td>兼职1004</td>
+							<td>13888888888</td>
+							<td>15366123665</td>
+							<td>1004</td>
+							<td style="position:relative;">
+								
+											企业套餐：6100
+										<span onclick="chargedetail(25362,1004,null,null,6100)" class="btnMore">更多</span>
+								
+							</td>
+							<td>
+							255625
+							</td>
+							<td>
+								
+								<span class="label label-lg label-success arrowed-right">已启用</span>
+							</td>
+							<td>
+								<a href="" class="btn btn-xs btn-info">查看</a>
+								<a href="" class="btn btn-xs btn-info">修改资料</a>
+								<a href="" class="btn btn-xs btn-info">修改密码</a>
+<a href="javascript:void(0);" onclick="userLogin(6065)" class="btn btn-xs btn-info">登录</a>	
+		                                <a 
+		                                   onclick="updateMonthStatus(1004,25362,true,this)"
+		                                   class="btn btn-xs btn-info month-nostauts" >取消月底禁用</a>
+		                                   
+		                                <a 
+		                                   onclick="updateMonthStatus(1004,25362,false,this)"
+		                                    class="btn btn-xs btn-danger month-stauts hide" >月底禁用</a>
+							</td>
+						</tr>
+						<tr role="row" class="odd">
+							<td class="text-center">
+			                    <div class="checkbox">
+			                        <label>
+			                            <input name="" type="checkbox" class="ace" value="1"
+			                                   id="tenant_info_is_third_net" data-id="6066">
+			                            <span class="lbl"></span>
+			                        </label>
+			                    </div>
+			                </td>
+							<td>emp1005</td>
+							<td>柳明亮</td>
+							<td>13888888888</td>
+							<td>15366123165</td>
+							<td>1005</td>
+							<td style="position:relative;">
+								
+											当月套餐3001
+										<span onclick="chargedetail(25362,1005,3001,null,6100)" class="btnMore">更多</span>
+								
+							</td>
+							<td>
+							255625
+							</td>
+							<td>
+								
+								<span class="label label-lg label-success arrowed-right">已启用</span>
+							</td>
+							<td>
+								<a href="" class="btn btn-xs btn-info">查看</a>
+								<a href="" class="btn btn-xs btn-info">修改资料</a>
+								<a href="" class="btn btn-xs btn-info">修改密码</a>
+<a href="javascript:void(0);" onclick="userLogin(6066)" class="btn btn-xs btn-info">登录</a>	
+		                            	<a 
+		                                   onclick="updateMonthStatus(1005,25362,true,this)"
+		                                   type="hidden" class="btn btn-xs btn-info month-nostauts hide" >取消月底禁用</a>
+		                                   
+		                            	<a 
+		                                   onclick="updateMonthStatus(1005,25362,false,this)"
+		                                   class="btn btn-xs btn-danger month-stauts" >月底禁用</a>
+							</td>
+						</tr>
+						<tr role="row" class="odd">
+							<td class="text-center">
+			                    <div class="checkbox">
+			                        <label>
+			                            <input name="" type="checkbox" class="ace" value="1"
+			                                   id="tenant_info_is_third_net" data-id="6067">
+			                            <span class="lbl"></span>
+			                        </label>
+			                    </div>
+			                </td>
+							<td>emp1006</td>
+							<td>王春梅</td>
+							<td>13888888888</td>
+							<td>15366123165</td>
+							<td>1006</td>
+							<td style="position:relative;">
+								
+											当月套餐3001
+										<span onclick="chargedetail(25362,1006,3001,null,6100)" class="btnMore">更多</span>
+								
+							</td>
+							<td>
+							255625
+							</td>
+							<td>
+								
+								<span class="label label-lg label-success arrowed-right">已启用</span>
+							</td>
+							<td>
+								<a href="" class="btn btn-xs btn-info">查看</a>
+								<a href="" class="btn btn-xs btn-info">修改资料</a>
+								<a href="" class="btn btn-xs btn-info">修改密码</a>
+<a href="javascript:void(0);" onclick="userLogin(6067)" class="btn btn-xs btn-info">登录</a>	
+		                            	<a 
+		                                   onclick="updateMonthStatus(1006,25362,true,this)"
+		                                   type="hidden" class="btn btn-xs btn-info month-nostauts hide" >取消月底禁用</a>
+		                                   
+		                            	<a 
+		                                   onclick="updateMonthStatus(1006,25362,false,this)"
+		                                   class="btn btn-xs btn-danger month-stauts" >月底禁用</a>
+							</td>
+						</tr>
+						<tr role="row" class="odd">
+							<td class="text-center">
+			                    <div class="checkbox">
+			                        <label>
+			                            <input name="" type="checkbox" class="ace" value="1"
+			                                   id="tenant_info_is_third_net" data-id="6068">
+			                            <span class="lbl"></span>
+			                        </label>
+			                    </div>
+			                </td>
+							<td>emp1007</td>
+							<td>卢莹</td>
+							<td>13888888888</td>
+							<td>15380939836</td>
+							<td>1007</td>
+							<td style="position:relative;">
+								
+											当月套餐3001
+										<span onclick="chargedetail(25362,1007,3001,null,6100)" class="btnMore">更多</span>
+								
+							</td>
+							<td>
+							255625
+							</td>
+							<td>
+								
+								<span class="label label-lg label-success arrowed-right">已启用</span>
+							</td>
+							<td>
+								<a href="" class="btn btn-xs btn-info">查看</a>
+								<a href="" class="btn btn-xs btn-info">修改资料</a>
+								<a href="" class="btn btn-xs btn-info">修改密码</a>
+<a href="javascript:void(0);" onclick="userLogin(6068)" class="btn btn-xs btn-info">登录</a>	
+		                            	<a 
+		                                   onclick="updateMonthStatus(1007,25362,true,this)"
+		                                   type="hidden" class="btn btn-xs btn-info month-nostauts hide" >取消月底禁用</a>
+		                                   
+		                            	<a 
+		                                   onclick="updateMonthStatus(1007,25362,false,this)"
+		                                   class="btn btn-xs btn-danger month-stauts" >月底禁用</a>
+							</td>
+						</tr>
+						<tr role="row" class="odd">
+							<td class="text-center">
+			                    <div class="checkbox">
+			                        <label>
+			                            <input name="" type="checkbox" class="ace" value="1"
+			                                   id="tenant_info_is_third_net" data-id="6070">
+			                            <span class="lbl"></span>
+			                        </label>
+			                    </div>
+			                </td>
+							<td>emp1009</td>
+							<td>兼职1009</td>
+							<td>13888888888</td>
+							<td>15380939836</td>
+							<td>1009</td>
+							<td style="position:relative;">
+								
+											当月套餐3001
+										<span onclick="chargedetail(25362,1009,3001,null,6100)" class="btnMore">更多</span>
+								
+							</td>
+							<td>
+							255625
+							</td>
+							<td>
+								
+								<span class="label label-lg label-success arrowed-right">已启用</span>
+							</td>
+							<td>
+								<a href="" class="btn btn-xs btn-info">查看</a>
+								<a href="" class="btn btn-xs btn-info">修改资料</a>
+								<a href="" class="btn btn-xs btn-info">修改密码</a>
+<a href="javascript:void(0);" onclick="userLogin(6070)" class="btn btn-xs btn-info">登录</a>	
+		                            	<a 
+		                                   onclick="updateMonthStatus(1009,25362,true,this)"
+		                                   type="hidden" class="btn btn-xs btn-info month-nostauts hide" >取消月底禁用</a>
+		                                   
+		                            	<a 
+		                                   onclick="updateMonthStatus(1009,25362,false,this)"
+		                                   class="btn btn-xs btn-danger month-stauts" >月底禁用</a>
+							</td>
+						</tr>
+						<tr role="row" class="odd">
+							<td class="text-center">
+			                    <div class="checkbox">
+			                        <label>
+			                            <input name="" type="checkbox" class="ace" value="1"
+			                                   id="tenant_info_is_third_net" data-id="6071">
+			                            <span class="lbl"></span>
+			                        </label>
+			                    </div>
+			                </td>
+							<td>emp1010</td>
+							<td>emp1010</td>
+							<td>13888888888</td>
+							<td>15380939836</td>
+							<td>1010</td>
+							<td style="position:relative;">
+								
+											企业套餐：6100
+										<span onclick="chargedetail(25362,1010,null,null,6100)" class="btnMore">更多</span>
+								
+							</td>
+							<td>
+							255625
+							</td>
+							<td>
+								
+								<span class="label label-lg label-success arrowed-right">已启用</span>
+							</td>
+							<td>
+								<a href="" class="btn btn-xs btn-info">查看</a>
+								<a href="" class="btn btn-xs btn-info">修改资料</a>
+								<a href="" class="btn btn-xs btn-info">修改密码</a>
+<a href="javascript:void(0);" onclick="userLogin(6071)" class="btn btn-xs btn-info">登录</a>	
+		                                <a 
+		                                   onclick="updateMonthStatus(1010,25362,true,this)"
+		                                   class="btn btn-xs btn-info month-nostauts" >取消月底禁用</a>
+		                                   
+		                                <a 
+		                                   onclick="updateMonthStatus(1010,25362,false,this)"
+		                                    class="btn btn-xs btn-danger month-stauts hide" >月底禁用</a>
+							</td>
+						</tr>
+						<tr role="row" class="odd">
+							<td class="text-center">
+			                    <div class="checkbox">
+			                        <label>
+			                            <input name="" type="checkbox" class="ace" value="1"
+			                                   id="tenant_info_is_third_net" data-id="6072">
+			                            <span class="lbl"></span>
+			                        </label>
+			                    </div>
+			                </td>
+							<td>emp1011</td>
+							<td>兼职1011</td>
+							<td>13888888888</td>
+							<td>15380939836</td>
+							<td>1011</td>
+							<td style="position:relative;">
+								
+											当月套餐3001
+										<span onclick="chargedetail(25362,1011,3001,null,6100)" class="btnMore">更多</span>
+								
+							</td>
+							<td>
+							255625
+							</td>
+							<td>
+								
+								<span class="label label-lg label-success arrowed-right">已启用</span>
+							</td>
+							<td>
+								<a href="" class="btn btn-xs btn-info">查看</a>
+								<a href="" class="btn btn-xs btn-info">修改资料</a>
+								<a href="" class="btn btn-xs btn-info">修改密码</a>
+<a href="javascript:void(0);" onclick="userLogin(6072)" class="btn btn-xs btn-info">登录</a>	
+		                            	<a 
+		                                   onclick="updateMonthStatus(1011,25362,true,this)"
+		                                   type="hidden" class="btn btn-xs btn-info month-nostauts hide" >取消月底禁用</a>
+		                                   
+		                            	<a 
+		                                   onclick="updateMonthStatus(1011,25362,false,this)"
+		                                   class="btn btn-xs btn-danger month-stauts" >月底禁用</a>
+							</td>
+						</tr>
+						<tr role="row" class="odd">
+							<td class="text-center">
+			                    <div class="checkbox">
+			                        <label>
+			                            <input name="" type="checkbox" class="ace" value="1"
+			                                   id="tenant_info_is_third_net" data-id="6073">
+			                            <span class="lbl"></span>
+			                        </label>
+			                    </div>
+			                </td>
+							<td>emp1012</td>
+							<td>emp1012</td>
+							<td>13888888888</td>
+							<td></td>
+							<td>1012</td>
+							<td style="position:relative;">
+								
+											企业套餐：6100
+										<span onclick="chargedetail(25362,1012,null,null,6100)" class="btnMore">更多</span>
+								
+							</td>
+							<td>
+							255625
+							</td>
+							<td>
+								
+								<span class="label label-lg label-success arrowed-right">已启用</span>
+							</td>
+							<td>
+								<a href="" class="btn btn-xs btn-info">查看</a>
+								<a href="" class="btn btn-xs btn-info">修改资料</a>
+								<a href="" class="btn btn-xs btn-info">修改密码</a>
+<a href="javascript:void(0);" onclick="userLogin(6073)" class="btn btn-xs btn-info">登录</a>	
+		                                <a 
+		                                   onclick="updateMonthStatus(1012,25362,true,this)"
+		                                   class="btn btn-xs btn-info month-nostauts" >取消月底禁用</a>
+		                                   
+		                                <a 
+		                                   onclick="updateMonthStatus(1012,25362,false,this)"
+		                                    class="btn btn-xs btn-danger month-stauts hide" >月底禁用</a>
+							</td>
+						</tr>
+						<tr role="row" class="odd">
+							<td class="text-center">
+			                    <div class="checkbox">
+			                        <label>
+			                            <input name="" type="checkbox" class="ace" value="1"
+			                                   id="tenant_info_is_third_net" data-id="6074">
+			                            <span class="lbl"></span>
+			                        </label>
+			                    </div>
+			                </td>
+							<td>emp1013</td>
+							<td>兼职1013</td>
+							<td>13888888888</td>
+							<td>15380939836</td>
+							<td>1013</td>
+							<td style="position:relative;">
+								
+											当月套餐3001
+										<span onclick="chargedetail(25362,1013,3001,null,6100)" class="btnMore">更多</span>
+								
+							</td>
+							<td>
+							255625
+							</td>
+							<td>
+								
+								<span class="label label-lg label-success arrowed-right">已启用</span>
+							</td>
+							<td>
+								<a href="" class="btn btn-xs btn-info">查看</a>
+								<a href="" class="btn btn-xs btn-info">修改资料</a>
+								<a href="" class="btn btn-xs btn-info">修改密码</a>
+<a href="javascript:void(0);" onclick="userLogin(6074)" class="btn btn-xs btn-info">登录</a>	
+		                            	<a 
+		                                   onclick="updateMonthStatus(1013,25362,true,this)"
+		                                   type="hidden" class="btn btn-xs btn-info month-nostauts hide" >取消月底禁用</a>
+		                                   
+		                            	<a 
+		                                   onclick="updateMonthStatus(1013,25362,false,this)"
+		                                   class="btn btn-xs btn-danger month-stauts" >月底禁用</a>
+							</td>
+						</tr>
+						<tr role="row" class="odd">
+							<td class="text-center">
+			                    <div class="checkbox">
+			                        <label>
+			                            <input name="" type="checkbox" class="ace" value="1"
+			                                   id="tenant_info_is_third_net" data-id="6075">
+			                            <span class="lbl"></span>
+			                        </label>
+			                    </div>
+			                </td>
+							<td>emp1014</td>
+							<td>兼职1014</td>
+							<td>13888888888</td>
+							<td>15380939836</td>
+							<td>1014</td>
+							<td style="position:relative;">
+								
+											当月套餐3001
+										<span onclick="chargedetail(25362,1014,3001,null,6100)" class="btnMore">更多</span>
+								
+							</td>
+							<td>
+							255625
+							</td>
+							<td>
+								
+								<span class="label label-lg label-success arrowed-right">已启用</span>
+							</td>
+							<td>
+								<a href="" class="btn btn-xs btn-info">查看</a>
+								<a href="" class="btn btn-xs btn-info">修改资料</a>
+								<a href="" class="btn btn-xs btn-info">修改密码</a>
+<a href="javascript:void(0);" onclick="userLogin(6075)" class="btn btn-xs btn-info">登录</a>	
+		                            	<a 
+		                                   onclick="updateMonthStatus(1014,25362,true,this)"
+		                                   type="hidden" class="btn btn-xs btn-info month-nostauts hide" >取消月底禁用</a>
+		                                   
+		                            	<a 
+		                                   onclick="updateMonthStatus(1014,25362,false,this)"
+		                                   class="btn btn-xs btn-danger month-stauts" >月底禁用</a>
+							</td>
+						</tr>
+						<tr role="row" class="odd">
+							<td class="text-center">
+			                    <div class="checkbox">
+			                        <label>
+			                            <input name="" type="checkbox" class="ace" value="1"
+			                                   id="tenant_info_is_third_net" data-id="6076">
+			                            <span class="lbl"></span>
+			                        </label>
+			                    </div>
+			                </td>
+							<td>emp1015</td>
+							<td>兼职1015</td>
+							<td>13888888888</td>
+							<td>15380939836</td>
+							<td>1015</td>
+							<td style="position:relative;">
+								
+											当月套餐3001
+										<span onclick="chargedetail(25362,1015,3001,null,6100)" class="btnMore">更多</span>
+								
+							</td>
+							<td>
+							255625
+							</td>
+							<td>
+								
+								<span class="label label-lg label-success arrowed-right">已启用</span>
+							</td>
+							<td>
+								<a href="" class="btn btn-xs btn-info">查看</a>
+								<a href="" class="btn btn-xs btn-info">修改资料</a>
+								<a href="" class="btn btn-xs btn-info">修改密码</a>
+<a href="javascript:void(0);" onclick="userLogin(6076)" class="btn btn-xs btn-info">登录</a>	
+		                            	<a 
+		                                   onclick="updateMonthStatus(1015,25362,true,this)"
+		                                   type="hidden" class="btn btn-xs btn-info month-nostauts hide" >取消月底禁用</a>
+		                                   
+		                            	<a 
+		                                   onclick="updateMonthStatus(1015,25362,false,this)"
+		                                   class="btn btn-xs btn-danger month-stauts" >月底禁用</a>
+							</td>
+						</tr>
+						<tr role="row" class="odd">
+							<td class="text-center">
+			                    <div class="checkbox">
+			                        <label>
+			                            <input name="" type="checkbox" class="ace" value="1"
+			                                   id="tenant_info_is_third_net" data-id="6077">
+			                            <span class="lbl"></span>
+			                        </label>
+			                    </div>
+			                </td>
+							<td>emp1016</td>
+							<td>兼职1016</td>
+							<td>13888888888</td>
+							<td>15380939836</td>
+							<td>1016</td>
+							<td style="position:relative;">
+								
+											当月套餐3001
+										<span onclick="chargedetail(25362,1016,3001,null,6100)" class="btnMore">更多</span>
+								
+							</td>
+							<td>
+							255625
+							</td>
+							<td>
+								
+								<span class="label label-lg label-success arrowed-right">已启用</span>
+							</td>
+							<td>
+								<a href="" class="btn btn-xs btn-info">查看</a>
+								<a href="" class="btn btn-xs btn-info">修改资料</a>
+								<a href="" class="btn btn-xs btn-info">修改密码</a>
+<a href="javascript:void(0);" onclick="userLogin(6077)" class="btn btn-xs btn-info">登录</a>	
+		                            	<a 
+		                                   onclick="updateMonthStatus(1016,25362,true,this)"
+		                                   type="hidden" class="btn btn-xs btn-info month-nostauts hide" >取消月底禁用</a>
+		                                   
+		                            	<a 
+		                                   onclick="updateMonthStatus(1016,25362,false,this)"
+		                                   class="btn btn-xs btn-danger month-stauts" >月底禁用</a>
+							</td>
+						</tr>
+						<tr role="row" class="odd">
+							<td class="text-center">
+			                    <div class="checkbox">
+			                        <label>
+			                            <input name="" type="checkbox" class="ace" value="1"
+			                                   id="tenant_info_is_third_net" data-id="6078">
+			                            <span class="lbl"></span>
+			                        </label>
+			                    </div>
+			                </td>
+							<td>emp1017</td>
+							<td>兼职1017</td>
+							<td>13888888888</td>
+							<td>15380939836</td>
+							<td>1017</td>
+							<td style="position:relative;">
+								
+											企业套餐：6100
+										<span onclick="chargedetail(25362,1017,null,null,6100)" class="btnMore">更多</span>
+								
+							</td>
+							<td>
+							255625
+							</td>
+							<td>
+								
+								<span class="label label-lg label-success arrowed-right">已启用</span>
+							</td>
+							<td>
+								<a href="" class="btn btn-xs btn-info">查看</a>
+								<a href="" class="btn btn-xs btn-info">修改资料</a>
+								<a href="" class="btn btn-xs btn-info">修改密码</a>
+<a href="javascript:void(0);" onclick="userLogin(6078)" class="btn btn-xs btn-info">登录</a>	
+		                                <a 
+		                                   onclick="updateMonthStatus(1017,25362,true,this)"
+		                                   class="btn btn-xs btn-info month-nostauts" >取消月底禁用</a>
+		                                   
+		                                <a 
+		                                   onclick="updateMonthStatus(1017,25362,false,this)"
+		                                    class="btn btn-xs btn-danger month-stauts hide" >月底禁用</a>
+							</td>
+						</tr>
+						<tr role="row" class="odd">
+							<td class="text-center">
+			                    <div class="checkbox">
+			                        <label>
+			                            <input name="" type="checkbox" class="ace" value="1"
+			                                   id="tenant_info_is_third_net" data-id="6079">
+			                            <span class="lbl"></span>
+			                        </label>
+			                    </div>
+			                </td>
+							<td>emp1018</td>
+							<td>兼职1018</td>
+							<td>13888888888</td>
+							<td></td>
+							<td>1018</td>
+							<td style="position:relative;">
+								
+											企业套餐：6100
+										<span onclick="chargedetail(25362,1018,null,null,6100)" class="btnMore">更多</span>
+								
+							</td>
+							<td>
+							255625
+							</td>
+							<td>
+								
+								<span class="label label-lg label-success arrowed-right">已启用</span>
+							</td>
+							<td>
+								<a href="" class="btn btn-xs btn-info">查看</a>
+								<a href="" class="btn btn-xs btn-info">修改资料</a>
+								<a href="" class="btn btn-xs btn-info">修改密码</a>
+<a href="javascript:void(0);" onclick="userLogin(6079)" class="btn btn-xs btn-info">登录</a>	
+		                                <a 
+		                                   onclick="updateMonthStatus(1018,25362,true,this)"
+		                                   class="btn btn-xs btn-info month-nostauts" >取消月底禁用</a>
+		                                   
+		                                <a 
+		                                   onclick="updateMonthStatus(1018,25362,false,this)"
+		                                    class="btn btn-xs btn-danger month-stauts hide" >月底禁用</a>
+							</td>
+						</tr>
+						<tr role="row" class="odd">
+							<td class="text-center">
+			                    <div class="checkbox">
+			                        <label>
+			                            <input name="" type="checkbox" class="ace" value="1"
+			                                   id="tenant_info_is_third_net" data-id="6080">
+			                            <span class="lbl"></span>
+			                        </label>
+			                    </div>
+			                </td>
+							<td>emp1019</td>
+							<td>兼职1019</td>
+							<td>13888888888</td>
+							<td>15365136229</td>
+							<td>1019</td>
+							<td style="position:relative;">
+								
+											企业套餐：6100
+										<span onclick="chargedetail(25362,1019,null,null,6100)" class="btnMore">更多</span>
+								
+							</td>
+							<td>
+							255625
+							</td>
+							<td>
+								
+								<span class="label label-lg label-success arrowed-right">已启用</span>
+							</td>
+							<td>
+								<a href="" class="btn btn-xs btn-info">查看</a>
+								<a href="" class="btn btn-xs btn-info">修改资料</a>
+								<a href="" class="btn btn-xs btn-info">修改密码</a>
+<a href="javascript:void(0);" onclick="userLogin(6080)" class="btn btn-xs btn-info">登录</a>	
+		                                <a 
+		                                   onclick="updateMonthStatus(1019,25362,true,this)"
+		                                   class="btn btn-xs btn-info month-nostauts" >取消月底禁用</a>
+		                                   
+		                                <a 
+		                                   onclick="updateMonthStatus(1019,25362,false,this)"
+		                                    class="btn btn-xs btn-danger month-stauts hide" >月底禁用</a>
+							</td>
+						</tr>
+						<tr role="row" class="odd">
+							<td class="text-center">
+			                    <div class="checkbox">
+			                        <label>
+			                            <input name="" type="checkbox" class="ace" value="1"
+			                                   id="tenant_info_is_third_net" data-id="6081">
+			                            <span class="lbl"></span>
+			                        </label>
+			                    </div>
+			                </td>
+							<td>emp1020</td>
+							<td>兼职1020</td>
+							<td>13888888888</td>
+							<td>15380939836</td>
+							<td>1020</td>
+							<td style="position:relative;">
+								
+											企业套餐：6100
+										<span onclick="chargedetail(25362,1020,null,null,6100)" class="btnMore">更多</span>
+								
+							</td>
+							<td>
+							255625
+							</td>
+							<td>
+								
+								<span class="label label-lg label-success arrowed-right">已启用</span>
+							</td>
+							<td>
+								<a href="" class="btn btn-xs btn-info">查看</a>
+								<a href="" class="btn btn-xs btn-info">修改资料</a>
+								<a href="" class="btn btn-xs btn-info">修改密码</a>
+<a href="javascript:void(0);" onclick="userLogin(6081)" class="btn btn-xs btn-info">登录</a>	
+		                                <a 
+		                                   onclick="updateMonthStatus(1020,25362,true,this)"
+		                                   class="btn btn-xs btn-info month-nostauts" >取消月底禁用</a>
+		                                   
+		                                <a 
+		                                   onclick="updateMonthStatus(1020,25362,false,this)"
+		                                    class="btn btn-xs btn-danger month-stauts hide" >月底禁用</a>
+							</td>
+						</tr>
+						<tr role="row" class="odd">
+							<td class="text-center">
+			                    <div class="checkbox">
+			                        <label>
+			                            <input name="" type="checkbox" class="ace" value="1"
+			                                   id="tenant_info_is_third_net" data-id="32371">
+			                            <span class="lbl"></span>
+			                        </label>
+			                    </div>
+			                </td>
+							<td>emp1021</td>
+							<td>emp1021</td>
+							<td>13888888888</td>
+							<td></td>
+							<td>1021</td>
+							<td style="position:relative;">
+								
+											企业套餐：6100
+										<span onclick="chargedetail(25362,1021,null,null,6100)" class="btnMore">更多</span>
+								
+							</td>
+							<td>
+							255625
+							</td>
+							<td>
+								
+								<span class="label label-lg label-success arrowed-right">已启用</span>
+							</td>
+							<td>
+								<a href="" class="btn btn-xs btn-info">查看</a>
+								<a href="" class="btn btn-xs btn-info">修改资料</a>
+								<a href="" class="btn btn-xs btn-info">修改密码</a>
+<a href="javascript:void(0);" onclick="userLogin(32371)" class="btn btn-xs btn-info">登录</a>	
+		                                <a 
+		                                   onclick="updateMonthStatus(1021,25362,true,this)"
+		                                   class="btn btn-xs btn-info month-nostauts" >取消月底禁用</a>
+		                                   
+		                                <a 
+		                                   onclick="updateMonthStatus(1021,25362,false,this)"
+		                                    class="btn btn-xs btn-danger month-stauts hide" >月底禁用</a>
+							</td>
+						</tr>
+				</tbody>
+			
+			</table>
+<div class="row">
+	<div class="col-xs-3">
+		<div class="dataTables_info" id="dynamic-table_info" role="status" aria-live="polite">共22条&nbsp;&nbsp;&nbsp;每页<select id="showPageSize"><option value="20">20</option><option value="50">50</option><option value="100">100</option></select>条 </div>
+	</div>
+	<div class="col-xs-9">
+		<div class="dataTables_paginate paging_simple_numbers" id="dynamic-table_paginate">
+			<ul class="pagination">
+				<!-- 首页 -->
+				<!-- 上一页 -->
+	                <li class="paginate_button previous disabled"><a href="javascript:void(0)">上一页</a></li> 
+				<!-- 不能全部显示 -->
+				<!-- ... -->
+	            
+	                    <!-- 当前页 -->
+	                   <li class="current active"><a href="javascript:void(0)">1</a></li>
+	                 
+	                    <li class="" data-page-no="2"><a href="">2</a></li>
+	                 
+	            
+	            
+				<!-- ... -->
+				<!-- 下一页 -->
+	                <li class="paginate_button next" data-page-no="2"><a href="javascript:turnPage(2)">下一页</a></li>
+				<!-- 尾页 -->
+			</ul>
+			<span class="pull-right">
+                <span>到第</span>
+                <input id="turn_page_button" name="turn_page_button" type="text" style="width:50px;height:30px;" value=""/>
+                <span>页</span>
+                &nbsp;&nbsp;
+                <input type="hidden" id="queryStatus" value=""/>
+                <input type="hidden" id="queryName" value=""/> 
+                
+                <input id="hideData" name="hideData" type="hidden" value="2">	                         
+                <input id="hideCondition" name="hideCondition" type="hidden" value="">
+		        <input id="hideActive" name="hideActive" type="hidden" value="true">
+                
+                <a class="btn btn-sm btn-info pull-right" style="height:30px;" href="javascript:turnPage(-1)" >确定</a>		
+			</span> 
+		</div>
+	</div>
+</div>
+			</div>
+		</div>	
+</div>
+	<script src="__PUBLIC__/assets/ty_js/agentstatistics/artDialog.min.js"></script>
+  	<script src="__PUBLIC__/assets/ty_js/agentstatistics/artDialog.plugins.min.js"></script>
+  	<script src="__PUBLIC__/assets/js/chosen.jquery.js"></script>
+	<script src="__PUBLIC__/assets/ty_js/user/user.js"></script>
+	<script src="__PUBLIC__/assets/ty_js/delete.js"></script>
+	<script src="__PUBLIC__/assets/js/jquery.cookie.js"></script>
+  
+	</body>
+	<!-- basic scripts -->
+
+	<script src="__PUBLIC__/assets/js/bootstrap.js"></script>
+    <script src="__PUBLIC__/assets/js/ace/ace.js"></script>
+    <script src="__PUBLIC__/assets/js/jquery-ui.js"></script>
+    <script src="__PUBLIC__/assets/ty_js/delete.js"></script>
+    <!-- page specific plugin scripts -->
+	<script src="__PUBLIC__/assets/js/jquery-ui.custom.js"></script>
+	<script src="__PUBLIC__/assets/js/jquery.ui.touch-punch.js"></script>
+	<!--<script src="/assets/assets/js/ace/elements.aside.js"></script>-->
+
+
+</html>

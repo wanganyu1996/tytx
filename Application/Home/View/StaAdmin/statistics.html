@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>租户管理</title>
+		<meta name="description" content="overview &amp; stats" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+
+		<!-- bootstrap & fontawesome -->
+		<link rel="stylesheet" href="__PUBLIC__/assets/css/chosen.css"/>
+		<link rel="stylesheet" href="__PUBLIC__/assets/css/bootstrap.css" />
+		<link rel="stylesheet" href="__PUBLIC__/assets/css/font-awesome.css" />
+
+		<!-- page specific plugin styles -->
+		<link rel="stylesheet" href="__PUBLIC__/assets/css/jquery-ui.css" />
+		<!-- text fonts -->
+		<link rel="stylesheet" href="__PUBLIC__/assets/css/ace-fonts.css" />
+		<!-- ace styles -->
+		<link rel="stylesheet" href="__PUBLIC__/assets/css/ace.css" class="ace-main-stylesheet" id="main-ace-style" />
+
+		<!--[if lte IE 9]>
+			<link rel="stylesheet" href="/assets/css/ace-part2.css" class="ace-main-stylesheet" />
+		<![endif]-->
+
+		<!--[if lte IE 9]>
+		  <link rel="stylesheet" href="/assets/css/ace-ie.css" />
+		<![endif]-->
+			<link rel="stylesheet" href="__PUBLIC__/assets/css/datepicker.css" />
+	<link rel="stylesheet" href="__PUBLIC__/assets/css/chosen.css" />
+	<!--列表页面使用 -->
+	<link rel="stylesheet" href="__PUBLIC__/assets/css/define.css" type="text/css" />
+	<!--其余的css-->
+	<link rel="stylesheet" href="__PUBLIC__/assets/css/popup.css" type="text/css" />
+	<link rel="stylesheet" href="__PUBLIC__/assets/css/zTree/zTreeStyle.css" />
+	<!-- art dialog -->
+	<link rel="stylesheet" href="__PUBLIC__/assets/css/aero.css" />
+	<style>
+		#formModal .form-group{margin-bottom:10px;}
+		#formModal .form-group .control-label{margin-top:5px;}
+		#formModal .form-group .radio{margin:4px 14px 0 0;}
+	</style>
+
+		<!-- HTML5shiv and Respond.js for IE8 to support HTML5 elements and media queries -->
+
+		<!--[if lte IE 8]>
+		<script src="/assets/js/html5shiv.js"></script>
+		<script src="/assets/js/respond.js"></script>
+		<![endif]-->
+	</head>
+	<body>
+	<div class="page-content">
+			<h3 class="header smaller lighter blue overflow">联络结果统计</h3>
+
+			<div>
+				<div id="dynamic-table_wrapper" class="dataTables_wrapper form-inline no-footer">
+					<div class="row pdb-10">
+						<form class="" action="" id="search_form" onsubmit="return checkDate()">
+							<input type="hidden" name="userIds" id="userIds" value="">
+							<div class="col-xs-12">
+								<div id="table_filter">
+								<input type="hidden" value="" id="timeType"/>
+	<select id="time_type" class=" form-control chzn-done pull-left" name="time_type" style="width: 94px;">
+		<option value="99">日报</option>
+		<option value="31">月报</option>
+		<option value="100">自定义</option>
+	</select>
+	<input type="hidden" id="startTime" name="startTime" value=""/>
+	<input type="hidden" id="endTime" name="endTime" value=""/>
+	<div class="dateDiv pull-left" style="width:140px;">
+		<div class="input-group">
+			<input type="text" data-date-format="yyyy-mm-dd" class="form-control date-picker onedaytime" id="oneDay" name="oneDay" value="">
+			<span class="input-group-addon">
+				<i class="fa fa-calendar bigger-110"></i>
+			</span>
+		</div>
+	</div>
+	<div class="dateMonthDiv pull-left" style="width:170px;display:none;" id="one_month_span">
+			<label class="control-label pull-left  no-padding-right mt-6">月份：</label>
+			<div class="input-group" style="width:126px;">
+				<input type="text" data-date-format="yyyy-mm" data_type="date_search" class="form-control date-picker" id="one_month" name="one_month" value="">
+				<span class="input-group-addon">
+					<i class="fa fa-calendar bigger-110"></i>
+				</span>
+			</div>
+		</div>
+	<div class="rangeDateDiv pull-left " style="width:454px;display:none;">
+		<div>
+			<label class="control-label pull-left  no-padding-right mt-6">开始：</label>
+			<div class="input-group pull-left" style="width:186px;">
+				<input id="startDate" name="startDate" type="text" class="form-control" value=""/>
+				<span class="input-group-addon">
+					<i class="fa fa-clock-o bigger-110"></i>
+				</span>
+			</div>
+			<label class="control-label no-padding-right pull-left mt-6">结束：</label>
+			<div class="input-group pull-left" style="width:186px;">
+				<input id="endDate" name="endDate" type="text" class="form-control" value=""/>
+				<span class="input-group-addon">
+					<i class="fa fa-clock-o bigger-110"></i>
+				</span>
+			</div>
+		</div>
+	</div>
+									<div class="btn-group">
+										<button id="campaign_sub_btn" class="btn btn-info btn-sm btn-s less_btn" type="submit" onclick="clearVal()">查询</button>
+
+										<a class="btn btn-sm btn-s btn-info dropdown-toggle" href="#formModal" data-toggle="modal" aria-expanded="false">
+											<span class="ace-icon fa fa-caret-down icon-only"></span>
+										</a>	
+										<a class="btn btn-info btn-sm btn-s export" href="" onclick="return noContact()">CSV导出</a>			
+									</div>
+									<!-- condition modal -->
+									<div class="modal fade bs-example-modal-sm" id="formModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+										<div class="modal-header">
+											<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+											<h4 class="modal-title" id="myModalLabel">多条件查询</h4>
+										</div>
+										<div class="modal-body">
+											<div class="form-group">
+												<label class="col-sm-3 control-label no-padding-right" for="form-field-1">
+													<label class="middle">坐席</label>
+												</label>
+												<div class="col-sm-9">
+													<div id="treeDemo" class="ztree" style="width:100%;">
+														
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="modal-footer">
+											<button class="btn btn-sm" data-dismiss="modal" aria-hidden="true" id="close2" onClick="clearVal()">取消</button>
+											<button class="btn btn-sm" type="button" onClick="doClear()">重置</button>
+											<button class="btn btn-sm btn-info" type="submit">确定</button>
+										</div>
+									</div>
+								</div>
+						</form>
+						</div>
+					</div>
+					<div class="table1">
+						<div>
+							<table id="reportContent" class="table table-striped table-bordered table-hover">
+								<thead>
+									<tr>
+										<th rowspan="2" style="background-color:rgb(247,247,247);text-align: center;" align="center">坐席名称</th>
+										<th rowspan="2" style="background-color:rgb(247,247,247);text-align: center;" align="center">统计总量</th>
+										<th rowspan="2" style="background-color:rgb(247,247,247);text-align: center;" align="center">未接通量</th>
+
+										<th colspan="6" align="center" style="text-align: center;">联络结果明细</th>
+									</tr>
+									<tr>
+										<th>
+											<div>待回访</div>
+										</th>
+										<th>
+											<div>考虑购买</div>
+										</th>
+										<th>
+											<div>已拒绝访问</div>
+										</th>
+										<th>
+											<div>已拒绝销售</div>
+										</th>
+										<th>
+											<div>禁止呼叫</div>
+										</th>
+										<th>
+											<div>已成交</div>
+										</th>
+									</tr>
+								</thead>
+								<tbody id="content" style="word-break: break-all;">
+									  <tr role="row" class="odd">
+										<td>兼职1016</td>
+										<td>15</td>
+										<td>0</td>
+										<td>0</td>
+										<td>0</td>
+										<td>0</td>
+										<td>0</td>
+										<td>0</td>
+										<td>0</td>									
+									   </tr>
+									  <tr role="row" class="odd">
+										<td>兼职1011</td>
+										<td>14</td>
+										<td>0</td>
+										<td>0</td>
+										<td>0</td>
+										<td>0</td>
+										<td>0</td>
+										<td>0</td>
+										<td>0</td>									
+									   </tr>
+									  <tr role="row" class="odd">
+										<td>柳明亮</td>
+										<td>9</td>
+										<td>0</td>
+										<td>0</td>
+										<td>0</td>
+										<td>0</td>
+										<td>0</td>
+										<td>0</td>
+										<td>0</td>									
+									   </tr>
+									  <tr role="row" class="odd">
+										<td>赵安琪</td>
+										<td>5</td>
+										<td>0</td>
+										<td>0</td>
+										<td>0</td>
+										<td>0</td>
+										<td>0</td>
+										<td>0</td>
+										<td>0</td>									
+									   </tr>
+									  <tr role="row" class="odd">
+										<td>王明飞</td>
+										<td>4</td>
+										<td>0</td>
+										<td>0</td>
+										<td>0</td>
+										<td>0</td>
+										<td>0</td>
+										<td>0</td>
+										<td>0</td>									
+									   </tr>
+									  <tr role="row" class="odd">
+										<td>王春梅</td>
+										<td>3</td>
+										<td>0</td>
+										<td>0</td>
+										<td>0</td>
+										<td>0</td>
+										<td>0</td>
+										<td>0</td>
+										<td>0</td>									
+									   </tr>
+									  <tr role="row" class="odd">
+										<td>兼职1014</td>
+										<td>9</td>
+										<td>0</td>
+										<td>0</td>
+										<td>0</td>
+										<td>0</td>
+										<td>0</td>
+										<td>0</td>
+										<td>0</td>									
+									   </tr>
+									  <tr role="row" class="odd">
+										<td>葛云</td>
+										<td>6</td>
+										<td>0</td>
+										<td>0</td>
+										<td>0</td>
+										<td>0</td>
+										<td>0</td>
+										<td>0</td>
+										<td>0</td>									
+									   </tr>
+									  <tr role="row" class="odd">
+										<td>卢莹</td>
+										<td>9</td>
+										<td>0</td>
+										<td>0</td>
+										<td>0</td>
+										<td>0</td>
+										<td>0</td>
+										<td>0</td>
+										<td>0</td>									
+									   </tr>
+								
+								</tbody>
+							</table>
+							<div id="dr-pagination" class="flickr_pagination no_pagination">
+								<div class="pagination" style="padding-left:8px;color:#a9a9a9;">总条数<span id="countTotal">9</span></div>
+							</div>
+						</div>
+
+					</div>
+
+				</div>
+			</div>
+		</div>
+  
+	</body>
+	<!-- basic scripts -->
+
+	<!--[if !IE]> -->
+	<script src="__PUBLIC__/assets/js/jquery.js"></script>
+
+	<!-- <![endif]-->
+
+	<!--[if IE]>
+<script src="/assets/js/jquery1x.js"></script>
+<![endif]-->
+	<script src="__PUBLIC__/assets/js/bootstrap.js"></script>
+	<script src="__PUBLIC__/assets/js/jquery-ui.js"></script>
+	<!-- page specific plugin scripts -->
+	<script src="__PUBLIC__/assets/js/jquery-ui.custom.js"></script>
+	<script src="__PUBLIC__/assets/js/jquery.ui.touch-punch.js"></script>
+	<!--<script src="/assets/assets/js/ace/elements.aside.js"></script>-->
+</html>    <script src="/assets/js/ace/ace.js"></script>
+
+	<script src="__PUBLIC__/assets/js/dataTables/jquery.dataTables.js"></script>
+	<script src="__PUBLIC__/assets/js/dataTables/jquery.dataTables.bootstrap.js"></script>
+	<script src="__PUBLIC__/assets/js/chosen.jquery.js"></script>
+	<script src="__PUBLIC__/assets/js/date-time/bootstrap-datepicker.js"></script>
+	<script src="__PUBLIC__/assets/js/date-time/daterangepicker.js"></script>
+	<script src="__PUBLIC__/assets/js/zTree/jquery.ztree.all.min.js"></script>
+	<script src="__PUBLIC__/assets/js/export2excel/Base64.js"></script>
+	<script src="__PUBLIC__/assets/js/export2excel/e2e-0.8.js"></script>
+	<script src="__PUBLIC__/assets/ty_js/agentstatistics/public.js"></script>
+	<script src="__PUBLIC__/assets/ty_js/agentstatistics/report.js"></script>
+	<script src="__PUBLIC__/assets/ty_js/agentstatistics/amcharts.js"></script>
+	<script src="__PUBLIC__/assets/ty_js/agentstatistics/rails.validations.js"></script>
+    <script src="__PUBLIC__/assets/ty_js/agentstatistics/rails.validations.simple_form.js"></script>
+    <script src="__PUBLIC__/assets/ty_js/agentstatistics/rails.validations.custom.js"></script>
+    <script src="__PUBLIC__/assets/ty_js/agentstatistics/artDialog.min.js"></script>
+    <script src="__PUBLIC__/assets/ty_js/agentstatistics/artDialog.plugins.min.js"></script>
+	<script src="__PUBLIC__/assets/js/cti/artDialog.min.js"></script>
+	<script src="__PUBLIC__/assets/js/cti/artDialog.plugins.min.js"></script>
+	<script src="__PUBLIC__/assets/js/date-time/bootstrap-datepicker.js"></script>
+	<script src="__PUBLIC__/assets/js/date-time/bootstrap-timepicker.js"></script>
+	<script src="__PUBLIC__/assets/js/date-time/moment.js"></script>
+	<script src="__PUBLIC__/assets/js/date-time/daterangepicker.js"></script>
+	<script src="__PUBLIC__/assets/js/date-time/bootstrap-datetimepicker.js"></script>
+	<script src="__PUBLIC__/assets/ty_js/getRangeTime.js"></script>
+    <script type="text/javascript">															
+		var setting = {
+			check: {
+				enable: true,
+				hkboxType: {
+					"Y": "ps",
+					"N": "ps"
+				}
+			},
+			data: {
+				simpleData: {
+					enable: true,
+					pIdKey: "parentId"
+				},
+				key: {
+					name: "name"
+				}
+			},
+			callback: {
+				onCheck: onCheck
+			}
+		};
+
+		function onCheck(e, treeId, treeNode) {
+			var treeObj = $.fn.zTree.getZTreeObj("treeDemo");
+			nodes = treeObj.getCheckedNodes(true);
+			check_ids = '';
+			for (var i = 0; i < nodes.length; i++) {
+				if(!nodes[i].isParent && !nodes[i].halfCheck){
+					if (check_ids != "") {
+						check_ids = check_ids + ',' + nodes[i].id;
+					} else {
+						check_ids += nodes[i].id;
+					}
+				}
+			}
+			console.log("Hello:" + check_ids);
+			$("#userIds").val(check_ids);
+			
+		}
+		check_ids = '';
+		var treeObj ;
+		var url = "/reporting/statistics/ztree";
+		$(document).ready(function() {
+			$.post(url,function(zNodes){
+				treeObj = $.fn.zTree.init($("#treeDemo"), setting, zNodes);
+				//treeObj.expandAll(true);//展开所有节点
+			},'json');
+			
+			//设置默认选中
+			//var node = treeObj.getNodeByParam("id", 1);
+			//treeObj.checkNode(node, true, true);
+		});
+		function clearVal() {
+			$("#userIds").val("");
+		}
+		function doClear(){
+			var nodes = treeObj.getCheckedNodes(true);
+			for (var i=0, l=nodes.length; i < l; i++) {
+				treeObj.checkNode(nodes[i], false, false);
+			}
+			clearVal();
+		}
+		
+		$(function() {
+			//时间查询
+			$("#time_type").change(function() {
+				if ($("#time_type option:selected").val() == 99) {
+					//某一天
+					$(".dateDiv").show();
+					$(".dateMonthDiv").hide();
+					$(".rangeDateDiv").hide();
+				} else if ($("#time_type option:selected").val() == 100) {
+					$(".rangeDateDiv").show();
+					$(".dateMonthDiv").hide();
+					$(".dateDiv").hide();
+				} else {
+					$(".dateMonthDiv").show();
+					$(".dateDiv").hide();
+					$(".rangeDateDiv").hide();
+				}
+			});
+			//时间初始化
+			$('.date-picker').datepicker({
+				language: "cn",
+				autoclose: true,
+				todayHighlight: true,
+				startDate: -Infinity
+			}).next().on(ace.click_event, function() {
+				$(this).prev().focus();
+			});
+			$('#startDate').datetimepicker({
+				 format: 'YYYY-MM-DD HH:mm',//use this option to display seconds
+				 icons: {
+					time: 'fa fa-clock-o',
+					date: 'fa fa-calendar',
+					up: 'fa fa-chevron-up',
+					down: 'fa fa-chevron-down',
+					previous: 'fa fa-chevron-left',
+					next: 'fa fa-chevron-right',
+					today: 'fa fa-arrows ',
+					clear: 'fa fa-trash',
+					close: 'fa fa-times'
+				 }
+				}).next().on(ace.click_event, function(){
+					$(this).prev().focus();
+				});
+			$('#endDate').datetimepicker({
+				 format: 'YYYY-MM-DD HH:mm',//use this option to display seconds
+				 icons: {
+					time: 'fa fa-clock-o',
+					date: 'fa fa-calendar',
+					up: 'fa fa-chevron-up',
+					down: 'fa fa-chevron-down',
+					previous: 'fa fa-chevron-left',
+					next: 'fa fa-chevron-right',
+					today: 'fa fa-arrows ',
+					clear: 'fa fa-trash',
+					close: 'fa fa-times'
+				 }
+				}).next().on(ace.click_event, function(){
+					$(this).prev().focus();
+				});
+			//
+			var myTable = $('#dynamic-table').DataTable({
+				bFilter:false,
+				bAutoWidth: false,
+				bSort:false,
+				"aaSorting": []
+			});
+			initDate();
+            //时间查询加载默认值
+            var value = $("#timeType").val();
+            $("#time_type option[value='"+value+"']").attr("selected", true);
+            if(value=="99"){
+                //某一天
+                $(".dateDiv").show();
+                $(".dateMonthDiv").hide();
+                $(".rangeDateDiv").hide();
+            }
+            if(value=="31"){
+                //某一月
+                $(".dateDiv").hide();
+                $(".dateMonthDiv").show();
+                $(".rangeDateDiv").hide();
+            }
+            if(value=="100"){
+                //自定义
+                $(".dateDiv").hide();
+                $(".dateMonthDiv").hide();
+                $(".rangeDateDiv").show();
+            }
+		});
+		function initDate() {
+			if ($('#oneDay').val() == "") {
+				$('#oneDay').val(getToday());
+			}
+			if ($('#one_month').val() == "") {
+				var t = new Date();
+				var month = t.getMonth() + 1;
+				if (month < 10) {
+					month = "0" + month;
+				}
+				$('#one_month').val(t.getFullYear() + '-' + month);
+			}
+		}
+		function noContact() {
+			if($("#countTotal").html() == 0) {
+				art.alert("抱歉，当前总条数为0，无法进行导出！");
+				return false;
+			}
+		}
+	</script>

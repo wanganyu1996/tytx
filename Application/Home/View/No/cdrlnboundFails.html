@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>租户管理</title>
+		<meta name="description" content="overview &amp; stats" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+        <script src="__PUBLIC__/assets/js/date-time/bootstrap-timepicker.js"></script>
+		<script src="__PUBLIC__/assets/js/date-time/moment.js"></script>
+		<script src="__PUBLIC__/assets/js/date-time/daterangepicker.js"></script>
+		<script src="__PUBLIC__/assets/js/date-time/bootstrap-datetimepicker.js"></script>
+		<!-- bootstrap & fontawesome -->
+		<link rel="stylesheet" href="__PUBLIC__/assets/css/chosen.css"/>
+		<link rel="stylesheet" href="__PUBLIC__/assets/css/bootstrap.css" />
+		<link rel="stylesheet" href="__PUBLIC__/assets/css/font-awesome.css" />
+
+		<!-- page specific plugin styles -->
+		<link rel="stylesheet" href="__PUBLIC__/assets/css/jquery-ui.css" />
+		<!-- text fonts -->
+		<link rel="stylesheet" href="__PUBLIC__/assets/css/ace-fonts.css" />
+		<!-- ace styles -->
+		<link rel="stylesheet" href="__PUBLIC__/assets/css/ace.css" class="ace-main-stylesheet" id="main-ace-style" />
+
+		<!--[if lte IE 9]>
+			<link rel="stylesheet" href="/assets/css/ace-part2.css" class="ace-main-stylesheet" />
+		<![endif]-->
+
+		<!--[if lte IE 9]>
+		  <link rel="stylesheet" href="/assets/css/ace-ie.css" />
+		<![endif]-->
+			<link rel="stylesheet" href="__PUBLIC__/assets/css/datepicker.css" />
+	<link rel="stylesheet" href="__PUBLIC__/assets/css/chosen.css" />
+	
+	<link rel="stylesheet" href="__PUBLIC__/assets/css/popup.css" type="text/css"/>
+	<link rel="stylesheet" href="__PUBLIC__/assets/css/define.css" type="text/css"/>
+	<link rel="stylesheet" href="__PUBLIC__/assets/css/aero.css" />
+	<!--列表页面使用 -->
+	<link rel="stylesheet" href="__PUBLIC__/assets/css/define.css" type="text/css" />
+	<link rel="stylesheet" href="__PUBLIC__/assets/css/bootstrap-timepicker.css" />
+	
+
+		<!-- HTML5shiv and Respond.js for IE8 to support HTML5 elements and media queries -->
+
+		<!--[if lte IE 8]>
+		<script src="/assets/js/html5shiv.js"></script>
+		<script src="/assets/js/respond.js"></script>
+		<![endif]-->
+	</head>
+	<body>
+	<div class="page-content">
+	<h3 class="header smaller lighter blue overflow">未接来电</h3>
+	
+		<div>
+			<div id="dynamic-table_wrapper" class="dataTables_wrapper form-inline no-footer">
+				<div class="row pdb-10">
+				<form class="" action="">
+					<div class="col-xs-8">
+						<div id="table_filter">
+							<input type="hidden" value="0" id="timeType"/>
+							<select id="time_type" name="time_type" class="form-control chzn-done pull-left"  style="width: 94px;">
+								<option value="0">当天记录</option>
+								<option value="1">昨天记录</option>
+								<option value="7">最近一周</option>
+								<option value="30">最近一月</option>
+								<option value="99">某一天</option>
+								<option value="100">自定义</option>
+							</select>
+							<div class="dateDiv pull-left" style="width:140px;display:none;">
+								<div class="input-group">
+									<input type="text" data-date-format="yyyy-mm-dd" class="form-control date-picker" name="oneDay" id="oneDay" value="" data_type="date_search">
+									<span class="input-group-addon"><i class="fa fa-calendar bigger-110"></i></span>
+								</div>
+							</div>
+							<div class="rangeDateDiv pull-left " style="width:454px;display:none;">
+								<div>
+									<label class="control-label pull-left  no-padding-right mt-6">开始：</label>
+									<div class="input-group pull-left" style="width:180px;">
+										<input type="text" class="form-control" name="startDate" id="startDate" value="" data_type="date_search">
+										<span class="input-group-addon"><i class="fa fa-clock-o bigger-110"></i></span>
+									</div>
+									<label class="control-label no-padding-right pull-left mt-6">结束：</label>
+									<div class="input-group pull-left" style="width:180px;">
+										<input type="text" class="form-control" name="endDate" id="endDate" value="" data_type="date_search">
+										<span class="input-group-addon"><i class="fa fa-clock-o bigger-110"></i></span>
+									</div>
+								</div>
+
+							</div>
+							<input type="search" class="form-control pull-left" id="condition" name="phoneNumber" placeholder="来电号码" style="width:100px;" value="" data_type="number">
+							<div class="btn-group">
+								<button class="btn btn-info btn-sm btn-s" type="submit" id="search">查询</button>
+							</div>
+						</div>
+					</div>
+				</form>
+				</div>
+				<div>
+				<div>
+					<table id="dynamic-table" class="table dataTable table-striped table-bordered table-hover">
+						<thead>
+							<tr role="row">
+								<th class="" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">拨打时间</th>
+								<th class="" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">挂断时间</th>
+								<th class="" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">呼叫号码</th>
+								<th class="" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">未接类型</th>
+								<th class="" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">坐席组</th>
+								<th class="" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">坐席</th>
+								<th class="" rowspan="1" colspan="1" aria-label="">操作</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr role="row" class="odd">
+								<td>2016-09-11 10:59:25</td>
+								<td>2016-09-11 10:59:31</td>
+								<td>
+									49213505182271
+								</td>
+								<td>
+									坐席组 
+									
+								</td>
+								<td>悦庭销售一组</td>
+								<td> </td>
+								<td>
+									<a href="javascript:void(0);" onclick="dialout(49213505182271,'49213505182271');" class="btn btn-sm btn-info btnView mr-4">回拨</a>
+								</td>
+							</tr>
+							<tr role="row" class="odd">
+								<td>2016-09-11 10:59:24</td>
+								<td>2016-09-11 10:59:30</td>
+								<td>
+									49213505181238
+								</td>
+								<td>
+									坐席组 
+									
+								</td>
+								<td>悦庭销售一组</td>
+								<td> </td>
+								<td>
+									<a href="javascript:void(0);" onclick="dialout(49213505181238,'49213505181238');" class="btn btn-sm btn-info btnView mr-4">回拨</a>
+								</td>
+							</tr>
+							
+							
+							
+						</tbody>
+					</table>
+
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <div class="dataTables_info" id="dynamic-table_info" role="status" aria-live="polite">共39条</div>
+                        </div>
+                        <div class="col-xs-6">
+                            <div class="dataTables_paginate paging_simple_numbers" id="dynamic-table_paginate">
+                                <ul class="pagination">
+                                        <li class="paginate_button previous disabled" aria-controls="dynamic-table" tabindex="0" id="dynamic-table_previous"><a href="javascript:void(0);">上一页</a></li>
+	                                           <li class="paginate_button active" aria-controls="dynamic-table" tabindex="0"><a href="">1</a></li>
+	                                           <li class="paginate_button" aria-controls="dynamic-table" tabindex="0"><a href="">2</a></li>
+	                                           <li class="paginate_button" aria-controls="dynamic-table" tabindex="0"><a href="">3</a></li>
+	                                           <li class="paginate_button" aria-controls="dynamic-table" tabindex="0"><a href="">4</a></li>
+                                       <li class="paginate_button next" aria-controls="dynamic-table" tabindex="0" id="dynamic-table_next"><a href="">下一页</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- condition modal -->
+		<div id="dialog-condition" class="hide">
+
+			<div class="row">
+				<div class="col-xs-12">
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right" for="form-field-1">
+							<label class="middle">座席姓名</label>
+						</label>
+						<div class="col-sm-9">
+						</div>
+						<br style="clear:both;" />
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right" for="form-field-1">
+							<label class="middle">客户姓名</label>
+						</label>
+						<div class="col-sm-9">
+							<input type="text" name="accountName" id="accountName" placeholder="" class="col-xs-12 col-sm-12" autofocus>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--system tips-->
+		<div id="dialog-export" class="hide">
+			<p>该操作耗时可能较长，是否继续？</p>
+		</div>
+		<div id="dialog-listen" class="hide text-center">
+			
+		</div>
+  
+	</body>
+	<!-- basic scripts -->
+
+	<!--[if !IE]> -->
+	<script src="__PUBLIC__/assets/js/jquery.js"></script>
+
+	<!-- <![endif]-->
+
+	<!--[if IE]>
+<script src="/assets/js/jquery1x.js"></script>
+<![endif]-->
+	<script src="__PUBLIC__/assets/js/bootstrap.js"></script>
+	<script src="__PUBLIC__/assets/js/jquery-ui.js"></script>
+	<!-- page specific plugin scripts -->
+	<script src="__PUBLIC__/assets/js/jquery-ui.custom.js"></script>
+	<script src="__PUBLIC__/assets/js/jquery.ui.touch-punch.js"></script>
+	<!--<script src="/assets/assets/js/ace/elements.aside.js"></script>-->
+	<script src="__PUBLIC__/assets/ty_js/agentstatistics/artDialog.min.js"></script>
+	<script src="__PUBLIC__/assets/ty_js/agentstatistics/artDialog.plugins.min.js"></script>
+	<script src="__PUBLIC__/assets/js/ace/ace.js"></script>
+	<script src="__PUBLIC__/assets/js/jquery-ui.js"></script>
+	<script src="__PUBLIC__/assets/js/chosen.jquery.js"></script>
+	<script src="__PUBLIC__/assets/js/date-time/bootstrap-datepicker.js"></script>
+	<script src="__PUBLIC__/assets/ty_js/cdrInboundFails/cdrInboundFails.js"></script>
+	<script src="__PUBLIC__/assets/ty_js/checkDate.js"></script>
+	
+	<script src="__PUBLIC__/assets/js/date-time/bootstrap-timepicker.js"></script>
+	<script src="__PUBLIC__/assets/js/date-time/moment.js"></script>
+	<script src="__PUBLIC__/assets/js/date-time/daterangepicker.js"></script>
+	<script src="__PUBLIC__/assets/js/date-time/bootstrap-datetimepicker.js"></script>
+</html> 

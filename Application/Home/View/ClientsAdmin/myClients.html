@@ -1,0 +1,285 @@
+
+
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>租户管理</title>
+		<meta name="description" content="overview &amp; stats" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+
+		<!-- bootstrap & fontawesome -->
+		<link rel="stylesheet" href="__PUBLIC__/assets/css/bootstrap.css" />
+		<link rel="stylesheet" href="__PUBLIC__/assets/css/font-awesome.css" />
+
+		<!-- page specific plugin styles -->
+		<link rel="stylesheet" href="__PUBLIC__/assets/css/jquery-ui.css" />
+		<!-- text fonts -->
+		<link rel="stylesheet" href="__PUBLIC__/assets/css/ace-fonts.css" />
+		<link rel="stylesheet" href="__PUBLIC__/assets/css/chosen.css" />
+		<!-- ace styles -->
+		<link rel="stylesheet" href="__PUBLIC__/assets/css/ace.css" class="ace-main-stylesheet" id="main-ace-style" />
+
+		<!--[if lte IE 9]>
+			<link rel="stylesheet" href="/assets/css/ace-part2.css" class="ace-main-stylesheet" />
+		<![endif]-->
+
+		<!--[if lte IE 9]>
+		  <link rel="stylesheet" href="/assets/css/ace-ie.css" />
+		<![endif]-->
+			<link rel="stylesheet" href="__PUBLIC__/assets/css/datepicker.css" />
+	<!--列表页面使用 -->
+	<link rel="stylesheet" href="__PUBLIC__/assets/css/popup.css" type="text/css" />
+	<link rel="stylesheet" href="__PUBLIC__/assets/css/define.css" type="text/css" />
+	<link rel="stylesheet" href="__PUBLIC__/assets/css/aero.css" />
+	<style>
+	#formModal .form-group{margin-bottom:10px;}
+ 	#formModal .chosen-container .chosen-results{max-height:140px;}
+	.fa-phone-square{font-size:22px;cursor:pointer;position:relative;top:3px;left:6px;}
+	.btn-group > .btn-xs, .btn-group + .btn-xs{border-width:3px;}
+	</style>
+
+		<!-- HTML5shiv and Respond.js for IE8 to support HTML5 elements and media queries -->
+
+		<!--[if lte IE 8]>
+		<script src="/assets/js/html5shiv.js"></script>
+		<script src="/assets/js/respond.js"></script>
+		<![endif]-->
+	</head>
+	<body>
+	<div class="page-content">
+	<h3 class="header smaller lighter blue overflow">
+		我的客户
+		
+		
+		
+		<a href="" class="btn btn-success pull-right btn-sm">新建客户</a></h3>
+		<div>
+			<div id="dynamic-table_wrapper" class="dataTables_wrapper form-inline no-footer">
+				<div class="row pdb-10">
+				<form class="" action="">
+					<div class="col-xs-8">
+						<div id="table_filter">
+							<input type="hidden" id="show_type" name="show_type" value="mine"/>
+							<input type="hidden" id="timeType" name="timeType" value="0"/>
+							<input type="hidden" id="pageSize" name="pageSize" value="20"/>
+							<select id="time_type" name="time_type" class="form-control chzn-done pull-left"  style="width: 94px;">
+								<option value="0">当天记录</option>
+								<option value="1">昨天记录</option>
+								<option value="7">最近一周</option>
+								<option value="30">最近一月</option>
+								<option value="99">某一天</option>
+								<option value="100">自定义</option>
+							</select>
+							<div class="dateDiv pull-left" style="width:140px;display:none;">
+								<div class="input-group">
+									<input type="text" data-date-format="yyyy-mm-dd" class="form-control date-picker onedaytime" name="oneDay" id="oneDay" data_type="date_search" value="2016-09-15">
+									<span class="input-group-addon"><i class="fa fa-calendar bigger-110"></i></span>
+								</div>
+							</div>
+							<input type="hidden" id="startTime" name="startTime" value="2016-09-15 00:00:00.000"/>
+							<input type="hidden" id="endTime" name="endTime" value="2016-09-15 23:59:59.999"/>
+							<div class="rangeDateDiv pull-left " style="width:454px;display:none;">
+								<div>
+									<label class="control-label pull-left  no-padding-right mt-6">开始：</label>
+									<div class="input-group pull-left" style="width:186px;">
+										<input type="text" class="form-control" name="startDate" id="startDate" value="2016-09-15 00:00">
+										<span class="input-group-addon"><i class="fa fa-clock-o bigger-110"></i></span>
+									</div>
+									<label class="control-label no-padding-right pull-left mt-6">结束：</label>
+									<div class="input-group pull-left" style="width:186px;">
+										<input type="text" class="form-control" name="endDate" id="endDate" value="2016-09-15 23:59">
+										<span class="input-group-addon"><i class="fa fa-clock-o bigger-110"></i></span>
+									</div>
+								</div>
+							</div>
+							<input type="search" class="form-control pull-left" id="mobile" name="mobile" placeholder="手机号" style="width:100px;" data_type="number" value="">
+							<div class="btn-group">
+								<button class="btn btn-info btn-sm btn-s" type="submit" id="search" onclick="doClear();">查询</button>
+								<button data-toggle="dropdown" class="btn btn-sm btn-s btn-info dropdown-toggle" id="moreCondition" aria-expanded="false">
+								<span class="ace-icon fa fa-caret-down icon-only"></span>
+								</button>
+									<button class="btn btn-info btn-sm btn-s" onclick="return csvExport(0);">CSV导出</button>
+							</div>
+						
+						<!-- condition modal -->
+						<div class="modal fade bs-example-modal-sm" id="formModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+								<h4 class="modal-title" id="myModalLabel">多条件查询</h4>
+							</div>
+							<div class="modal-body">
+								<div class="form-group">
+									<label class="col-sm-3 control-label no-padding-right" for="form-field-1">
+									<label class="middle">座席姓名</label>
+									</label>
+								<div class="col-sm-9">
+									<input type="hidden" name="seatIds" id="seatIds" value=""/>
+									<select multiple="" class="chosen-select form-control" id="seatName" name="seatName"  data-placeholder="请选择">
+											<option value="32373">行政招聘</option>
+											<option value="32372">emp1022</option>
+											<option value="32371">emp1021</option>
+											<option value="6081">兼职1020</option>
+											<option value="6080">兼职1019</option>
+											<option value="6079">兼职1018</option>
+											<option value="6078">兼职1017</option>
+											<option value="6077">兼职1016</option>
+											<option value="6076">兼职1015</option>
+											<option value="6075">兼职1014</option>
+											<option value="6074">兼职1013</option>
+											<option value="6073">emp1012</option>
+											<option value="6072">兼职1011</option>
+											<option value="6071">emp1010</option>
+											<option value="6070">兼职1009</option>
+											<option value="6069">葛云</option>
+											<option value="6068">卢莹</option>
+											<option value="6067">王春梅</option>
+											<option value="6066">柳明亮</option>
+											<option value="6065">兼职1004</option>
+											<option value="6064">兼职1003</option>
+											<option value="6063">赵安琪</option>
+											<option value="6062">王明飞</option>
+									</select>
+								</div>
+								<br style="clear:both;" />
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label no-padding-right" for="form-field-1">
+									<label class="middle">客户姓名</label>
+								</label>
+								<div class="col-sm-9">
+									<input type="text" name="accountName" id="accountName" placeholder="" class="col-xs-12 col-sm-12" autofocus value="">
+								</div>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button class="btn btn-sm" data-dismiss="modal" aria-hidden="true" id="close2">取消</button>
+							<button class="btn btn-sm" type="button" onclick="doClear();">重置</button>
+							<button class="btn btn-sm btn-info" type="submit">确定</button>
+						</div>
+				</form>
+					</div>
+					</div>
+					</div>
+					<div class="col-xs-4 text-right" style="margin-top:3px;">
+						<div class="btn-group">
+                            <button aria-expanded="false" class="btn btn-info btn-xs dropdown-toggle" data-toggle="dropdown"> 
+                            	选定分配 <span class="ace-icon fa fa-caret-down icon-on-right"></span>
+                           	</button>
+                            <ul class="dropdown-menu dropdown-info dropdown-menu-right">
+                            	<li><a onclick="update_seat('/crm/accounts/update_seat?creatorId=6066');" href="javascript:;" >我</a></li>
+                                <li><a onclick="update_seat('/crm/accounts/update_seat?creatorId=');" href="javascript:;">公海</a></li>
+                                <li><a onclick="del_select('seat');">指定坐席</a></li>
+                            </ul>
+                        </div>
+						<a href="javascript:;" class="btn btn-info btn-xs" id="select_delete" onclick="del_select('del');" title="需要先选中客户记录，才能使用此操作">选定删除</a>
+						<input type="hidden" id="pageNum" name="pageNum" value="1"/>
+						<a href="" class="btn btn-info btn-xs">CSV导入</a>
+						<a href="" class="btn btn-info btn-xs">今日回访</a>
+					</div>
+				</div>
+				
+				<div>
+					<table id="dynamic-table" class="table dataTable table-striped table-bordered table-hover">
+						<thead>
+							<tr role="row">
+								<th class="text-center" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">
+									<div class="checkbox">
+										<label>
+											<input name="form-field-checkbox" type="checkbox" class="ace" onclick="checkAll(this)">
+											<span class="lbl"></span>
+										</label>
+									</div>
+								</th>
+								<th class="" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">姓名</th>
+								<th class="" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">手机</th>
+								<th class="" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">最后点击外呼时间</th>
+									<th class="" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">性别</th>
+									<th class="" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">回访日期</th>
+								<th class="" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">负责人</th>
+								<th class="" rowspan="1" colspan="1" aria-label="">操作</th>
+							</tr>
+						</thead>
+						<tbody>
+						</tbody>
+					</table>
+					
+<div class="row">
+	<div class="col-xs-6">
+		<div class="dataTables_info" id="dynamic-table_info" role="status" aria-live="polite">共0条	&nbsp;&nbsp;&nbsp;每页<select id="showPageSize"><option value="20">20</option><option value="50">50</option><option value="100">100</option></select>条 </div>
+	</div>
+	<div class="col-xs-6">
+		<div class="dataTables_paginate paging_simple_numbers" id="dynamic-table_paginate">
+			<ul class="pagination">
+				<!-- 首页 -->
+				<!-- 上一页 -->
+	                <li class="paginate_button previous disabled"><a href="javascript:void(0)">上一页</a></li>               
+				<!-- 不能全部显示 -->
+				<!-- ... -->
+	         
+	                    <!-- 当前页 -->
+	                   <li></li>
+	                 
+	                	<li> </li>	                	          	
+	                 
+				<!-- ... --> 
+	           
+				<!-- 下一页 -->
+		            <li class="paginate_button previous disabled"><a href="javascript:void(0)">下一页</a></li> 
+				<!-- 尾页 -->
+			</ul>									
+		</div>
+	</div>
+</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	
+		<!--system tips-->
+		<div id="dialog-export" class="hide">
+			<p>该操作耗时可能较长，是否继续？</p>
+		</div>
+  
+	</body>
+	<!-- basic scripts -->
+
+	<!--[if !IE]> -->
+	<script src="__PUBLIC__/assets/js/jquery.js"></script>
+
+	<!-- <![endif]-->
+
+	<!--[if IE]>
+<script src="/assets/js/jquery1x.js"></script>
+<![endif]-->
+	<script src="__PUBLIC__/assets/js/bootstrap.js"></script>
+	<script src="__PUBLIC__/assets/js/jquery-ui.js"></script>
+	<!-- page specific plugin scripts -->
+	<script src="__PUBLIC__/assets/js/jquery-ui.custom.js"></script>
+	<script src="__PUBLIC__/assets/js/jquery.ui.touch-punch.js"></script>
+	<!--<script src="/assets/assets/js/ace/elements.aside.js"></script>-->
+	
+	<script src="__PUBLIC__/assets/ty_js/agentstatistics/artDialog.min.js"></script>
+  	<script src="__PUBLIC__/assets/ty_js/agentstatistics/artDialog.plugins.min.js"></script>
+
+	<script src="__PUBLIC__/assets/ty_js/agentstatistics/artDialog.min.js"></script>
+  	<script src="__PUBLIC__/assets/ty_js/agentstatistics/artDialog.plugins.min.js"></script>
+  	
+  	<script src="__PUBLIC__/assets/js/date-time/bootstrap-timepicker.js"></script>
+	<script src="__PUBLIC__/assets/js/date-time/moment.js"></script>
+	<script src="__PUBLIC__/assets/js/date-time/daterangepicker.js"></script>
+	<script src="__PUBLIC__/assets/js/date-time/bootstrap-datetimepicker.js"></script>
+  	
+	<script src="__PUBLIC__/assets/js/ace/ace.js"></script>
+	<script src="__PUBLIC__/assets/js/jquery-ui.js"></script>
+	<script src="__PUBLIC__/assets/js/chosen.jquery.js"></script>
+	<script src="__PUBLIC__/assets/js/date-time/bootstrap-datepicker.js"></script>
+	<script src="__PUBLIC__/assets/js/date-time/daterangepicker.js"></script>
+	<script src="__PUBLIC__/assets/ty_js/accounts/accounts.js"></script>
+	<script src="__PUBLIC__/assets/ty_js/delete.js"></script>
+	<script src="__PUBLIC__/assets/ty_js/checkDate.js"></script>
+	<script src="__PUBLIC__/assets/ty_js/getRangeTime.js"></script>
+</html> 

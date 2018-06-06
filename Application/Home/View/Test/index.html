@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+		<meta charset="UTF-8">
+		<title>租户管理</title>
+		<meta name="description" content="overview &amp; stats">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+		<!-- bootstrap & fontawesome -->
+	
+		<link rel="stylesheet" href="__PUBLIC__/assets/css/bootstrap.css">
+       
+		<!-- page specific plugin styles -->
+	
+		<!-- text fonts -->
+		<!-- ace styles -->
+
+		<!--[if lte IE 9]>
+			<link rel="stylesheet" href="/assets/css/ace-part2.css" class="ace-main-stylesheet" />
+		<![endif]-->
+
+		<!--[if lte IE 9]>
+		  <link rel="stylesheet" href="/assets/css/ace-ie.css" />
+		<![endif]-->
+	
+	
+	<!--列表页面使用 -->
+	
+	</head>
+	<body>
+	<!---通话记录单条修改页面---->        
+				<div class="modal-body">
+					<div class=" form-group" >
+					 <label for="inputEmail3" class="col-sm-2 control-label"><font size = "3px">呼叫时间</font></label>
+						<div class="col-sm-10 ">
+							<input type="text"  name="calltime" id="calltime" class="form-control "  value="">
+						</div>
+				</div>
+		</div>
+		
+	<script src="__PUBLIC__/assets/js/jquery.js"></script>	
+	<script src="__PUBLIC__/assets/js/date-time/moment.js"></script>
+	<script src="__PUBLIC__/assets/js/date-time/bootstrap-datetimepicker.js"></script>
+
+	
+      
+ </div>
+ </body>
+ </html>
+<script type="text/javascript"> 
+//表单呼叫时间 
+$("#calltime").datetimepicker({
+	format: 'YYYY-MM-DD hh:mm:ss',
+	});
+
+
+</script>
+ 

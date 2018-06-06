@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>租户管理</title>
+		<meta name="description" content="overview &amp; stats" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+
+		<!-- bootstrap & fontawesome -->
+		<link rel="stylesheet" href="__PUBLIC__/assets/css/bootstrap.css" />
+		<link rel="stylesheet" href="__PUBLIC__/assets/css/font-awesome.css" />
+
+		<!-- page specific plugin styles -->
+		<link rel="stylesheet" href="__PUBLIC__/assets/css/jquery-ui.css" />
+		<!-- text fonts -->
+		<link rel="stylesheet" href="__PUBLIC__/assets/css/ace-fonts.css" />
+        <link rel="stylesheet" href="__PUBLIC__/assets/css/chosen.css" />
+		<!-- ace styles -->
+		<link rel="stylesheet" href="__PUBLIC__/assets/css/ace.css" class="ace-main-stylesheet" id="main-ace-style" />
+
+		<!--[if lte IE 9]>
+			<link rel="stylesheet" href="/assets/css/ace-part2.css" class="ace-main-stylesheet" />
+		<![endif]-->
+
+		<!--[if lte IE 9]>
+		  <link rel="stylesheet" href="/assets/css/ace-ie.css" />
+		<![endif]-->
+		
+		<!-- HTML5shiv and Respond.js for IE8 to support HTML5 elements and media queries -->
+
+		<!--[if lte IE 8]>
+		<script src="/assets/js/html5shiv.js"></script>
+		<script src="/assets/js/respond.js"></script>
+		<![endif]-->
+		<!--[if !IE]> -->
+	<script src="__PUBLIC__/assets/js/jquery.js"></script>
+
+	<!-- <![endif]-->
+	
+	<!--[if IE]>
+<script src="/assets/js/jquery1x.js"></script>
+<![endif]-->
+	</head>
+	<body>
+	<style>
+			.monitor-div {
+				overflow: hidden;
+				padding: 10px 0px;
+				margin-bottom: 20px;
+			}
+			
+			.monitor-item {
+				width: 170px;
+				border-radius: 6px;
+				height: 70px;
+				padding: 7px;
+				zoom: 1;
+				font-size: 15px;
+				border: dotted 1px #a0abb4;
+				position: relative;
+				float: left;
+				margin: 5px;
+				color: #4b6981;
+			}
+			
+			.monitor-item p {
+				font-size: 12px;
+				height: 30px;
+				line-height: 30px;
+				margin: 4px 0 6px;
+				padding-left: 32px;
+			}
+			
+			.telOffLine {
+				background: url(__PUBLIC__/assets/img/monitor/huajilixian.png) 0 3px no-repeat;
+				background-size: 24px 24px;
+			}
+			
+			.ready {
+				background: url(__PUBLIC__/assets/img/monitor/jiuxu.png) 0 3px no-repeat;
+				background-size: 24px 24px;
+			}
+			
+			.offline {
+				background: url(__PUBLIC__/assets/img/monitor/lixian.png) 0 3px no-repeat;
+				background-size: 24px 24px;
+			}
+			
+			.rest {
+				background: url(__PUBLIC__/assets/img/monitor/xiuxi.png) 0 3px no-repeat;
+				background-size: 24px 24px;
+			}
+			
+			.clean {
+				background: url(__PUBLIC__/assets/img/monitor/xiaojiezhong.png) 0 3px no-repeat;
+				background-size: 24px 24px;
+			}
+			
+			.talking {
+				background: url(__PUBLIC__/assets/img/monitor/tonghuazhong.png) 0 3px no-repeat;
+				background-size: 24px 24px;
+			}
+			
+			.busy {
+				background: url(__PUBLIC__/assets/img/monitor/manglu.png) 0 3px no-repeat;
+				background-size: 24px 24px;
+			}
+			
+			.monitor-info {
+				padding-left: 8px;
+				margin-top: 8px;
+			}
+			
+			.monitor-div .radio {
+				position: absolute;
+				top: 6px;
+				right: 6px;
+			}
+			
+			#msg i {
+				font-style: normal;
+			}
+			
+			#table_filter {
+				margin-top: 5px;
+			}
+			
+			.monitor-select {
+				border: solid 1px #bce8f1;
+				background: #e8fafe;
+			}
+			/*monihtor style*/
+			
+			.infobox {
+				width: 12.5%;
+				border-top: solid 2px #d3dae2;
+				border-bottom: solid 2px #d3dae2;
+			}
+			
+			.infobox>.infobox-data {
+				min-width: auto;
+			}
+			
+			.infobox-newcolor {
+				color: #4b6981;
+				cursor:pointer;
+			}
+			
+			.infobox .infobox-content {
+				color: #4b6981;
+			}
+			.infobox-container .active{background:url(__PUBLIC__/assets/img/monitor/active_bg.png) repeat;}
+			.noAgtent{width:300px;height:300px;margin:100px auto 0;background:url(__PUBLIC__/assets/img/monitor/noAgent.png) center center no-repeat;}
+</style>
+			<div class="page-content">
+			<h3 class="header smaller lighter blue overflow">坐席监控</h3>
+
+			<div>
+				<div class=" form-inline no-footer">
+				<input type="hidden" id="getPhoneOnline" value="https://tytx-hz.uccc.cc:8291"/>
+				<input type="hidden" id="intervalSecond" value="30"/>
+					<div class="row" style="padding-bottom:10px;">
+						<div class="col-xs-12">
+							<div id="table_filter">
+								<!--<span class="red" id="msg"><i>就绪：0 &nbsp;&nbsp; 未就绪：0 &nbsp;&nbsp;  通话中：0  &nbsp;&nbsp; 离线：0</i></span>-->
+								<div class="infobox-container">
+									<!-- #section:pages/dashboard.infobox -->
+									<div class="infobox infobox-newcolor active" onclick="appendHtml('all')" rel="all" title="">
+										<div class="infobox-icon">
+											<img src="__PUBLIC__/assets/img/monitor/quanbu.png" width="46" />
+										</div>
+
+										<div class="infobox-data">
+											<span class="infobox-data-number" id="allcount"></span>
+											<div class="infobox-content">全部</div>
+										</div>
+
+									</div>
+
+									<div class="infobox infobox-newcolor" onclick="appendHtml('ready')" rel="ready" title="座席登入了系统之后，在等待分配电话">
+										<div class="infobox-icon">
+											<img src="__PUBLIC__/assets/img/monitor/jiuxu.png" width="46" />
+										</div>
+
+										<div class="infobox-data">
+											<span class="infobox-data-number" id="readycount"></span>
+											<div class="infobox-content">就绪</div>
+										</div>
+									</div>
+
+									<div class="infobox infobox-newcolor" onclick="appendHtml('busy')" rel="busy" title="座席点击了电话条示忙，此时不会有电话分配">
+										<div class="infobox-icon">
+											<img src="__PUBLIC__/assets/img/monitor/manglu.png" width="46" />
+										</div>
+
+										<div class="infobox-data">
+											<span class="infobox-data-number" id="busycount"></span>
+											<div class="infobox-content">示忙</div>
+										</div>
+									</div>
+
+									<div class="infobox infobox-newcolor" onclick="appendHtml('rest')" rel="rest" title="座席点击了电话条的休息">
+										<div class="infobox-icon">
+											<img src="__PUBLIC__/assets/img/monitor/xiuxi.png" width="46" />
+										</div>
+
+										<div class="infobox-data">
+											<span class="infobox-data-number" id="restcount"></span>
+											<div class="infobox-content">休息</div>
+										</div>
+									</div>
+
+									<div class="infobox infobox-newcolor" onclick="appendHtml('talking')" rel="talking" title="座席在通话中">
+										<!-- #section:pages/dashboard.infobox.sparkline -->
+										<div class="infobox-icon">
+											<img src="__PUBLIC__/assets/img/monitor/tonghuazhong.png" width="46" />
+										</div>
+
+										<!-- /section:pages/dashboard.infobox.sparkline -->
+										<div class="infobox-data">
+											<span class="infobox-data-number" id="talkingcount"></span>
+											<div class="infobox-content">通话中</div>
+										</div>
+									</div>
+
+									<div class="infobox infobox-newcolor" onclick="appendHtml('clean')" rel="clean" title="通话结束后，座席正在整理信息">
+										<!-- #section:pages/dashboard.infobox.sparkline -->
+										<div class="infobox-icon">
+											<img src="__PUBLIC__/assets/img/monitor/xiaojiezhong.png" width="46" />
+										</div>
+
+										<!-- /section:pages/dashboard.infobox.sparkline -->
+										<div class="infobox-data">
+											<span class="infobox-data-number" id="cleancount"></span>
+											<div class="infobox-content">整理中</div>
+										</div>
+									</div>
+
+									<div class="infobox infobox-newcolor" onclick="appendHtml('offline')" rel="offline" title="座席已经登出系统">
+										<!-- #section:pages/dashboard.infobox.sparkline -->
+										<div class="infobox-icon">
+											<img src="__PUBLIC__/assets/img/monitor/lixian.png" width="46" />
+										</div>
+										<!-- /section:pages/dashboard.infobox.sparkline -->
+										<div class="infobox-data">
+											<span class="infobox-data-number" id="offlinecount"></span>
+											<div class="infobox-content">离线</div>
+										</div>
+									</div>
+
+									<div class="infobox infobox-newcolor" onclick="appendHtml('teleoutline')" rel="teleoutline" title="话机未成功连接通信系统">
+										<!-- #section:pages/dashboard.infobox.sparkline -->
+										<div class="infobox-icon">
+											<img src="__PUBLIC__/assets/img/monitor/huajilixian.png" width="46" />
+										</div>
+
+										<!-- /section:pages/dashboard.infobox.sparkline -->
+										<div class="infobox-data">
+											<span class="infobox-data-number" id="teloutlinecount"></span>
+											<div class="infobox-content">话机离线</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!--<div class="col-xs-4 pull-right">
+							<div class="btn-group pull-right btns">
+								<button class="btn btn-sm btn-default" style="margin-right:6px;" onclick="doMonitorCall();" disabled="disabled">监听</button>
+								<button class="btn btn-sm btn-default" style="margin-right:6px;" onclick="doPartyChange();" disabled="disabled">强拆</button>
+								<button class="btn btn-sm btn-default" onclick="doReleaseCall();" disabled="disabled">挂断</button>
+							</div>
+						</div>-->
+					</div>
+					<div class="monitor-div"></div>
+				</div>
+			</div>
+		
+		<script type="text/javascript">
+			var users ={"25362_1023":"行政招聘","25362_1012":"emp1012","25362_1001":"王明飞","25362_1022":"emp1022","25362_1011":"兼职1011","25362_1021":"emp1021","25362_1010":"emp1010","25362_1005":"柳明亮","25362_1016":"兼职1016","25362_1015":"兼职1015","25362_1003":"兼职1003","25362_1014":"兼职1014","25362_1002":"赵安琪","25362_1013":"兼职1013","25362_1009":"兼职1009","25362_1007":"卢莹","25362_1006":"王春梅"};
+			var agents ={"25362_1023":"emp1023","25362_1012":"emp1012","25362_1001":"emp1001","25362_1022":"emp1022","25362_1011":"emp1011","25362_1021":"emp1021","25362_1010":"emp1010","25362_1005":"emp1005","25362_1016":"emp1016","25362_1015":"emp1015","25362_1003":"emp1003","25362_1014":"emp1014","25362_1002":"emp1002","25362_1013":"emp1013","25362_1009":"emp1009","25362_1007":"emp1007","25362_1006":"emp1006"};
+			var telnums ={"25362_1023":"13888888888","25362_1012":"13888888888","25362_1001":"13888888888","25362_1022":"13888888888","25362_1011":"13888888888","25362_1021":"13888888888","25362_1010":"13888888888","25362_1005":"13888888888","25362_1016":"13888888888","25362_1015":"13888888888","25362_1003":"13888888888","25362_1014":"13888888888","25362_1002":"13888888888","25362_1013":"13888888888","25362_1009":"13888888888","25362_1007":"13888888888","25362_1006":"13888888888"};
+			var pbxcodes ={"25362_1023":"25362_8000","25362_1012":"25362_8000","25362_1001":"25362_8003","25362_1022":"25362_8000","25362_1011":"25362_8003","25362_1021":"25362_8000","25362_1010":"25362_8003","25362_1005":"25362_8003","25362_1016":"25362_8003","25362_1015":"25362_8003","25362_1003":"25362_8000","25362_1014":"25362_8003","25362_1002":"25362_8003","25362_1013":"25362_8003","25362_1009":"25362_8003","25362_1007":"25362_8003","25362_1006":"25362_8003"};
+			var dns=["25362_1023","25362_1012","25362_1001","25362_1022","25362_1011","25362_1021","25362_1010","25362_1005","25362_1016","25362_1015","25362_1003","25362_1014","25362_1002","25362_1013","25362_1009","25362_1007","25362_1006"];
+			var vosAll=["25362_1023","25362_1012","25362_1001","25362_1022","25362_1011","25362_1021","25362_1010","25362_1005","25362_1016","25362_1015","25362_1003","25362_1014","25362_1002","25362_1013","25362_1009","25362_1007","25362_1006"];
+		</script>
+		<script src="__PUBLIC__/assets/ty_js/monitor/setMealMonitorList.js"></script>
+		<script src="__PUBLIC__/assets/ty_js/monitor/monitor.js"></script>
+		
+  
+	</body>
+	<!-- basic scripts -->
+
+	<script src="__PUBLIC__/assets/js/bootstrap.js"></script>
+    <script src="__PUBLIC__/assets/js/ace/ace.js"></script>
+    <script src="__PUBLIC__/assets/js/jquery-ui.js"></script>
+    <script src="__PUBLIC__/assets/ty_js/delete.js"></script>
+    <!-- page specific plugin scripts -->
+	<script src="__PUBLIC__/assets/js/jquery-ui.custom.js"></script>
+	<script src="__PUBLIC__/assets/js/jquery.ui.touch-punch.js"></script>
+	<!--<script src="/assets/assets/js/ace/elements.aside.js"></script>-->
+
+
+</html> 

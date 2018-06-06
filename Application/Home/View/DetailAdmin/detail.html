@@ -1,0 +1,440 @@
+	
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>租户管理</title>
+		<meta name="description" content="overview &amp; stats" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+
+		<!-- bootstrap & fontawesome -->
+		<link rel="stylesheet" href="__PUBLIC__/assets/css/bootstrap.css" />
+		<link rel="stylesheet" href="__PUBLIC__/assets/css/font-awesome.css" />
+
+		<!-- page specific plugin styles -->
+		<link rel="stylesheet" href="__PUBLIC__/assets/css/jquery-ui.css" />
+		<!-- text fonts -->
+		<link rel="stylesheet" href="__PUBLIC__/assets/css/ace-fonts.css" />
+        <link rel="stylesheet" href="__PUBLIC__/assets/css/chosen.css" />
+		<!-- ace styles -->
+		<link rel="stylesheet" href="__PUBLIC__/assets/css/ace.css" class="ace-main-stylesheet" id="main-ace-style" />
+
+		<!--[if lte IE 9]>
+			<link rel="stylesheet" href="/assets/css/ace-part2.css" class="ace-main-stylesheet" />
+		<![endif]-->
+
+		<!--[if lte IE 9]>
+		  <link rel="stylesheet" href="/assets/css/ace-ie.css" />
+		<![endif]-->
+			<link rel="stylesheet" href="__PUBLIC__/assets/css/aero.css" />
+	<link rel="stylesheet" href="__PUBLIC__/assets/css/popup.css" type="text/css" />
+	<link rel="stylesheet" href="__PUBLIC__/assets/css/define.css" type="text/css" />
+	<link rel="stylesheet" href="__PUBLIC__/assets/css/datepicker.css" />
+	<style>
+		.chosen-container{float:left;margin-top:1px;}
+	</style>
+
+		<!-- HTML5shiv and Respond.js for IE8 to support HTML5 elements and media queries -->
+
+		<!--[if lte IE 8]>
+		<script src="/assets/js/html5shiv.js"></script>
+		<script src="/assets/js/respond.js"></script>
+		<![endif]-->
+		<!--[if !IE]> -->
+	<script src="__PUBLIC__/assets/js/jquery.js"></script>
+
+	<!-- <![endif]-->
+	
+	<!--[if IE]>
+<script src="/assets/js/jquery1x.js"></script>
+<![endif]-->
+	</head>
+	<body>
+			<div class="page-content">
+			<h3 class="header smaller lighter blue overflow">交易明细</h3>
+
+			<div>
+				<div id="dynamic-table_wrapper" class="dataTables_wrapper form-inline no-footer">
+					<div class="row" style="padding-bottom:10px;">
+						<div class="col-xs-10">
+							<div id="table_filter">
+								<form  action="" onsubmit="return checkcustomDate()">
+								<input type="hidden" name="showTenantId" value="25362"/> 
+									 <select id="deal_type" name="dealType" class="chosen-select form-control pull-left" >
+									 	
+						                <option 
+						                	selected
+						                  value="1">充值记录</option>
+						                <option  value="2">人工扣费</option>
+						                <option  value="3">系统扣费</option>
+						                <option  value="4">话费明细</option>
+						              </select>
+						              <span class="time_type pull-left">
+							              <select id="time_type" name="timeTypeOne" class="form-control pull-left" >
+							                <option value="31">本月</option>
+							                <option value="29">上月</option>
+							                <option value="100">自定义</option>
+							              </select>
+						             
+						                  <div class="rangeDateDiv pull-left" style="width:454px;display:none;">
+											<div>
+												<label class="control-label pull-left  no-padding-right mt-6">开始：</label>
+												<div class="input-group pull-left" style="width:166px;">
+													<input id="startDateDay" type="text" data-date-format="yyyy-mm-dd"  class="form-control date-picker">
+													<span class="input-group-addon">
+														<i class="fa fa-calendar bigger-110"></i>
+													</span>
+												</div>
+												<label class="control-label no-padding-right pull-left mt-6">结束：</label>
+												<div class="input-group pull-left" style="width:166px;">
+													<input id="endDateDay" type="text" data-date-format="yyyy-mm-dd"  class="form-control date-picker">
+													<span class="input-group-addon">
+															<i class="fa fa-calendar bigger-110"></i>
+													</span>
+												</div>
+											</div>
+										  </div>
+ 									  </span>
+ 									  <span class="time_type1 pull-left" style="display:none;">
+							              <select id="time_type1" name="timeTypeTwo" class="form-control pull-left" >
+							                <option value="31">本月</option>
+							                <option value="29">上月</option>
+							                <option value="100">自定义</option>
+							              </select>
+							              <div class="rangeDateMonthDiv pull-left" style="width:454px;display:none;">
+										  <div>
+												<label class="control-label pull-left  no-padding-right mt-6">开始：</label>
+												<div class="input-group pull-left" style="width:166px;">
+													<input id="startDateMonth" type="text" data-date-format="yyyy-mm-dd"  class="form-control date-picker">
+												<span class="input-group-addon">
+																				<i class="fa fa-calendar bigger-110"></i>
+																			</span>
+												</div>
+												<label class="control-label no-padding-right pull-left mt-6">结束：</label>
+												<div class="input-group pull-left" style="width:166px;">
+													<input id="endDateMonth" type="text" data-date-format="yyyy-mm-dd"  class="form-control date-picker">
+												<span class="input-group-addon">
+																				<i class="fa fa-calendar bigger-110"></i>
+																		</span>
+												</div>
+											</div>
+										</div>
+						              </span>
+						              <span class="other">
+						              <select id="tenantNo" name="userCode" class="form-control tenantNo" >
+						                <option value="0000">全部坐席</option>
+						               		 	<option value="25362_1001">王明飞</option>
+						               		 	<option value="25362_1002">赵安琪</option>
+						               		 	<option value="25362_1003">兼职1003</option>
+						               		 	<option value="25362_1004">兼职1004</option>
+						               		 	<option value="25362_1005">柳明亮</option>
+						               		 	<option value="25362_1006">王春梅</option>
+						               		 	<option value="25362_1007">卢莹</option>
+						               		 	<option value="25362_1008">葛云</option>
+						               		 	<option value="25362_1009">兼职1009</option>
+						               		 	<option value="25362_1010">emp1010</option>
+						               		 	<option value="25362_1011">兼职1011</option>
+						               		 	<option value="25362_1012">emp1012</option>
+						               		 	<option value="25362_1013">兼职1013</option>
+						               		 	<option value="25362_1014">兼职1014</option>
+						               		 	<option value="25362_1015">兼职1015</option>
+						               		 	<option value="25362_1016">兼职1016</option>
+						               		 	<option value="25362_1017">兼职1017</option>
+						               		 	<option value="25362_1018">兼职1018</option>
+						               		 	<option value="25362_1019">兼职1019</option>
+						               		 	<option value="25362_1020">兼职1020</option>
+						               		 	<option value="25362_1021">emp1021</option>
+						               		 	<option value="25362_1022">emp1022</option>
+						               		 	<option value="25362_1023">行政招聘</option>
+						              </select>
+						              </span>
+						              <input type="hidden" id="startTime"  name="startTime"/>
+									  <input type="hidden" id="endTime"  name="endTime" />
+									  <input type="hidden" id="startTimebak" value="2016-09-01 00:00:00" />
+									  <input type="hidden" id="endTimebak" value="2016-09-12 19:21:38"  />
+									  <div class="btn-group">
+											<button type="submit" class="btn btn-info btn-sm btn-s">查询</button>
+									  </div>
+								</form>
+								
+							</div>
+						</div>
+					</div>
+					<div>
+					<table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer">
+						<thead>
+							<tr role="row">
+								<th class="" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">类型</th>
+								<th class="" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">金额</th>
+								<th class="" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">座席</th>
+								<th tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">描述</th>
+								<th class="" rowspan="1" colspan="1" aria-label="">时间</th>
+							</tr>
+						</thead>
+
+						<tbody>
+									<tr role="row" class="odd">
+											<td>人工充值</td>
+											<td>210</td>
+											<td></td>
+											<td>宋圆圆---1023坐席开错套餐（业务告知是开5分单个100保底，客户qq直接告知开坐席开成了300南京市话包月），应该开5分单个100保底</td>
+											<td>
+												2016-09-09 14:32:49
+											</td>
+									</tr>
+						</tbody>
+					</table>
+					
+<div class="row">
+	<div class="col-xs-5">
+		<div class="dataTables_info" id="dynamic-table_info" role="status" aria-live="polite">共1条  &nbsp;&nbsp;&nbsp;</div>
+	</div>
+	<div class="col-xs-7">
+		<div class="dataTables_paginate paging_simple_numbers" id="dynamic-table_paginate">
+			<ul class="pagination">
+				<!-- 首页 -->
+				<!-- 上一页 -->
+	                <li class="paginate_button previous disabled"><a href="javascript:void(0)">上一页</a></li>               
+				<!-- 不能全部显示 -->
+				<!-- ... -->
+	         
+	                    <!-- 当前页 -->
+	                   <li class="current active"><a href="javascript:void(0)">1</a></li>
+	                 
+				<!-- ... --> 
+	           
+				<!-- 下一页 -->
+		            <li class="paginate_button previous disabled"><a href="javascript:void(0)">下一页</a></li> 
+				<!-- 尾页 -->
+			</ul>									
+		</div>
+	</div>
+</div>
+					</div>
+				</div>
+			</div>
+			
+		</div>
+
+  
+	</body>
+	<!-- basic scripts -->
+
+	<script src="__PUBLIC__/assets/js/bootstrap.js"></script>
+    <script src="__PUBLIC__/assets/js/ace/ace.js"></script>
+    <script src="__PUBLIC__/assets/js/jquery-ui.js"></script>
+    <script src="__PUBLIC__/assets/ty_js/delete.js"></script>
+    <!-- page specific plugin scripts -->
+	<script src="__PUBLIC__/assets/js/jquery-ui.custom.js"></script>
+	<script src="__PUBLIC__/assets/js/jquery.ui.touch-punch.js"></script>
+	<!--<script src="/assets/assets/js/ace/elements.aside.js"></script>-->
+
+
+</html>	<script src="__PUBLIC__/assets/js/chosen.jquery.js"></script>
+	<script src="__PUBLIC__/assets/js/date-time/bootstrap-datepicker.js"></script>
+	<script src="__PUBLIC__/assets/js/date-time/moment.js"></script>
+	<script src="__PUBLIC__/assets/js/date-time/bootstrap-datetimepicker.js"></script>
+	<script src="__PUBLIC__/assets/js/cti/artDialog.min.js"></script>
+	<script src="__PUBLIC__/assets/js/cti/artDialog.plugins.min.js"></script>
+	<script src="__PUBLIC__/assets/ty_js/getRangeTimeBill.js"></script>
+	<script src="__PUBLIC__/assets/ty_js/tenant/selfRecharge.js"></script>
+	<script>
+		$(".chosen-select").chosen();
+		$("#deal_type").change(function(){
+		var _val = $(this).find("option:selected").val();
+			if(_val == 3){
+				$(".other").hide();
+				$(".time_type1").show();
+				$("#time_type1").val('31');
+				$(".time_type").hide();
+				$("#time_type1").val('31');
+				$("#startDateMonth").val('');
+				$("#endDateMonth").val('');
+				getMonthFn(31);
+			}else{
+				$(".other").hide();
+				if(_val == 4){
+					$(".other").show();
+				}
+				$("#time_type").val('31');
+				$(".time_type").show();
+				$(".time_type1").hide();
+				$("#time_type").val('31');
+				$(".rangeDateDiv").hide();
+				$("#startDateDay").val('');
+				$("#endDateDay").val('');
+				getTimeValue(31);
+			}
+		});
+		
+		$("#time_type1").change(function(){
+			$("#startDateMonth").val('');
+			$("#endDateMonth").val('');
+			if($(this).find("option:selected").val() == 100){
+				$(".rangeDateMonthDiv").show();
+			}else{
+				$(".rangeDateMonthDiv").hide();
+			}
+			if($(this).find("option:selected").val() == 31){
+				getMonthFn(31)
+			}
+			if($(this).find("option:selected").val() == 29){
+				getMonthFn(29)
+			}
+			if($(this).find("option:selected").val() == 100){
+				$("#startTime,#endTime").val('');
+			}
+		});
+		$(function(){
+			var val = $("#deal_type option:selected").val();
+			
+			
+			if(val == 3){
+					$(".other").hide();
+					$(".time_type1").show();
+					$(".time_type").hide();
+				var val2 = $("#time_type1 option:selected").val();
+				if(val2==31){
+						getMonthFn(31);
+					}
+					if(val2==29){
+						getMonthFn(29);
+					}
+					if(val2==100){
+						$(".rangeDateMonthDiv").show();
+						$("#startTime").val($("#startTimebak").val());
+						$("#endTime").val($("#endTimebak").val());
+						$("#startDateMonth").val($("#startTimebak").val());
+						$("#endDateMonth").val($("#endTimebak").val());
+					}
+			}else {
+				$(".other").hide();
+				if(val == 4){
+					$(".other").show();
+				}
+				$(".time_type").show();
+				$(".time_type1").hide();
+				var val1 = $("#time_type option:selected").val();
+				if(val1==31){
+					getTimeValue(31);
+				}
+				if(val1==29){
+					getTimeValue(29);
+				}
+				if(val1==100){
+					$(".rangeDateDiv").show();
+					$("#startTime").val($("#startTimebak").val());
+					$("#endTime").val($("#endTimebak").val());
+					$("#startDateDay").val($("#startTimebak").val());
+					$("#endDateDay").val($("#endTimebak").val());
+				}
+			}
+			
+		});
+	
+		$("#time_type").change(function(){
+			$("#startDateDay").val('');
+				$("#endDateDay").val('');
+			if($(this).find("option:selected").val() == 100){
+				$(".rangeDateDiv").show();
+			}else{
+				$(".rangeDateDiv").hide();
+			}
+		});
+		$('#startDateDay').datepicker({
+			language: "cn",
+			autoclose: true,
+			todayHighlight: true,
+			endDate:new Date()
+		}).change(function(){
+			$("#startTime").val($(this).val()+ ' 00:00:00.000')
+		}).next().on(ace.click_event, function() {
+			$(this).prev().focus();
+		});
+		$('#endDateDay').datepicker({
+			language: "cn",
+			autoclose: true,
+			todayHighlight: true,
+			endDate:new Date()
+		}).change(function(){
+			$("#endTime").val($(this).val()+ ' 23:59:59.999')
+		}).next().on(ace.click_event, function() {
+			$(this).prev().focus();
+		});
+		$('#startDateMonth').datepicker({
+		language: "cn",
+		format: 'yyyy-mm',
+		weekStart: 1,
+		autoclose: true,
+		startView: 2,
+		maxViewMode: 1,
+		minViewMode: 1,
+		forceParse: false,
+		endDate:new Date()
+		
+	}).next().on(ace.click_event, function() {
+		$(this).prev().focus();
+	});
+	$('#endDateMonth').datepicker({
+		language: "cn",
+		format: 'yyyy-mm',
+		weekStart: 1,
+		autoclose: true,
+		startView: 2,
+		maxViewMode: 1,
+		minViewMode: 1,
+		forceParse: false,
+		endDate:new Date()
+		
+	}).next().on(ace.click_event, function() {
+		$(this).prev().focus();
+	});
+	getTimeValue(31);
+	$("#startDateMonth").change(function(){
+		$("#startTime").val($(this).val().replace('-',''))
+	});
+	$("#endDateMonth").change(function(){
+		$("#endTime").val($(this).val().replace('-',''))
+	});
+	
+	function getMonthFn(type){
+		var date = new Date();
+		var year = date.getFullYear();
+		var month = date.getMonth()+1;
+		if(type == 29){
+			month = date.getMonth();
+		}
+		month = month <10 ? '0'+month : month;
+		$('#startTime,#endTime').val(year+month);
+	}
+	function checkcustomDate(){
+		if($("#time_type").css("display") == 'block'){
+			if($("#time_type option:selected").val()== '100'){
+				var startDate = new Date($("#startDateDay").val());
+				var endDate = new Date($("#endDateDay").val());
+				if($("#startDateDay").val() == '' || $("#endDateDay").val() == ''){
+					art.alert("自定义时间不能为空");
+					return false;
+				}else if(startDate.getTime()> endDate.getTime()){
+					art.alert("开始时间不能大于结束时间");
+					return false;
+				}
+			}
+		}
+		if($("#time_type1").css("display") == 'block'){
+			if($("#time_type1 option:selected").val()== '100'){
+				var startDate = new Date($("#startDateMonth").val());
+				var endDate = new Date($("#endDateMonth").val());
+				if($("#startDateMonth").val() == '' || $("#endDateMonth").val() == ''){
+					art.alert("自定义时间不能为空");
+					return false;
+				}else if(startDate.getTime()> endDate.getTime()){
+					art.alert("开始时间不能大于结束时间");
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+</script>

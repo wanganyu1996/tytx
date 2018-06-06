@@ -1,0 +1,130 @@
+	
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>租户管理</title>
+		<meta name="description" content="overview &amp; stats" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+
+		<!-- bootstrap & fontawesome -->
+		<link rel="stylesheet" href="__PUBLIC__/assets/css/bootstrap.css" />
+		<link rel="stylesheet" href="__PUBLIC__/assets/css/font-awesome.css" />
+
+		<!-- page specific plugin styles -->
+		<link rel="stylesheet" href="__PUBLIC__/assets/css/jquery-ui.css" />
+		<!-- text fonts -->
+		<link rel="stylesheet" href="__PUBLIC__/assets/css/ace-fonts.css" />
+        <link rel="stylesheet" href="__PUBLIC__/assets/css/chosen.css" />
+		<!-- ace styles -->
+		<link rel="stylesheet" href="__PUBLIC__/assets/css/ace.css" class="ace-main-stylesheet" id="main-ace-style" />
+
+		<!--[if lte IE 9]>
+			<link rel="stylesheet" href="/assets/css/ace-part2.css" class="ace-main-stylesheet" />
+		<![endif]-->
+
+		<!--[if lte IE 9]>
+		  <link rel="stylesheet" href="/assets/css/ace-ie.css" />
+		<![endif]-->
+			<link rel="stylesheet" href="__PUBLIC__/assets/css/popup.css" type="text/css" />
+	<link rel="stylesheet" href="__PUBLIC__/assets/css/define.css" type="text/css" />
+
+		<!-- HTML5shiv and Respond.js for IE8 to support HTML5 elements and media queries -->
+
+		<!--[if lte IE 8]>
+		<script src="/assets/js/html5shiv.js"></script>
+		<script src="/assets/js/respond.js"></script>
+		<![endif]-->
+		<!--[if !IE]> -->
+	<script src="__PUBLIC__/assets/js/jquery.js"></script>
+
+	<!-- <![endif]-->
+	
+	<!--[if IE]>
+<script src="/assets/js/jquery1x.js"></script>
+<![endif]-->
+	</head>
+	<body>
+			<div class="page-content">
+			<h3 class="header smaller lighter blue overflow">角色管理<a href="" class="btn btn-success pull-right btn-sm">添加角色</a></h3>
+
+			<div>
+				<div id="dynamic-table_wrapper" class="dataTables_wrapper form-inline no-footer">
+					<div class="row">
+					
+
+					</div>
+					<table id="dynamic-table" class="table dataTable table-striped table-bordered table-hover">
+						<thead>
+							<tr role="row">
+								<th class="" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">角色名称</th>
+								<th class="" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">职责范围</th>
+								<th class="" rowspan="1" colspan="1" aria-label="">操作</th>
+							</tr>
+						</thead>
+
+						<tbody>
+							<tr role="row" class="odd">
+								<td>管理员</td>
+								<td>
+									   全局
+								</td>
+								<td>
+                                           <a href="" class="btn btn-sm btn-info">查看</a>
+                                           <a href="" class="btn btn-sm btn-info">修改</a>
+								</td>
+							</tr>
+							<tr role="row" class="odd">
+								<td>坐席班长</td>
+								<td>									    全组
+								</td>
+								<td>
+                                           <a href="" class="btn btn-sm btn-info">查看</a>
+                                           <a href="" class="btn btn-sm btn-info">修改</a>
+								</td>
+							</tr>
+							<tr role="row" class="odd">
+								<td>普通坐席</td>
+								<td>									    个人
+								</td>
+								<td>
+                                           <a href="" class="btn btn-sm btn-info">查看</a>
+                                           <a href="" class="btn btn-sm btn-info">修改</a>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<!-- modal -->
+			<div id="dialog-del" class="hide">
+				
+			</div>
+		</div>
+
+  
+	</body>
+	<!-- basic scripts -->
+
+	<script src="__PUBLIC__/assets/js/bootstrap.js"></script>
+    <script src="__PUBLIC__/assets/js/ace/ace.js"></script>
+    <script src="__PUBLIC__/assets/js/jquery-ui.js"></script>
+    <script src="__PUBLIC__/assets/ty_js/delete.js"></script>
+    <!-- page specific plugin scripts -->
+	<script src="__PUBLIC__/assets/js/jquery-ui.custom.js"></script>
+	<script src="__PUBLIC__/assets/js/jquery.ui.touch-punch.js"></script>
+	<!--<script src="/assets/assets/js/ace/elements.aside.js"></script>-->
+
+
+	<script src="__PUBLIC__/assets/js/dataTables/jquery.dataTables.js"></script>
+	<script src="__PUBLIC__/assets/js/dataTables/jquery.dataTables.bootstrap.js"></script>
+	<script src="__PUBLIC__/assets/js/dataTables/extensions/Buttons/js/dataTables.buttons.js"></script>
+	<script src="__PUBLIC__/assets/js/dataTables/extensions/Buttons/js/buttons.flash.js"></script>
+	<script src="__PUBLIC__/assets/js/dataTables/extensions/Buttons/js/buttons.html5.js"></script>
+	<script src="__PUBLIC__/assets/js/dataTables/extensions/Buttons/js/buttons.print.js"></script>
+	<script src="__PUBLIC__/assets/js/dataTables/extensions/Buttons/js/buttons.colVis.js"></script>
+	<script src="__PUBLIC__/assets/js/dataTables/extensions/Select/js/dataTables.select.js"></script>
+	<script src="__PUBLIC__/assets/ty_js/roles/rolesList.js"></script>
+	<script src="__PUBLIC__/assets/js/zTree/jingle-cc-ztree.js"></script>
+</html>

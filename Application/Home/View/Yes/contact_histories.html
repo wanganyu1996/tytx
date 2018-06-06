@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>租户管理</title>
+		<meta name="description" content="overview &amp; stats" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+
+		<!-- bootstrap & fontawesome -->
+		<link rel="stylesheet" href="__PUBLIC__/assets/css/chosen.css"/>
+		<link rel="stylesheet" href="__PUBLIC__/assets/css/bootstrap.css" />
+		<link rel="stylesheet" href="__PUBLIC__/assets/css/font-awesome.css" />
+        <script src="__PUBLIC__/assets/js/jquery.js"></script>
+		<script src="__PUBLIC__/assets/js/date-time/bootstrap-timepicker.js"></script>
+		<script src="__PUBLIC__/assets/js/date-time/moment.js"></script>
+		<script src="__PUBLIC__/assets/js/date-time/daterangepicker.js"></script>
+		<script src="__PUBLIC__/assets/js/date-time/bootstrap-datetimepicker.js"></script>
+		<script src="__PUBLIC__/assets/js/date-time/bootstrap-datepicker.js"></script>
+		<script src="__PUBLIC__/assets/js/date-time/bootstrap-timepicker.js"></script>
+		<script src="__PUBLIC__/assets/js/date-time/bootstrap-datepicker.js"></script>
+		<script src="__PUBLIC__/assets/js/date-time/daterangepicker.js"></script>
+		<script src="__PUBLIC__/assets/js/date-time/bootstrap-datetimepicker.js"></script>
+		<!-- page specific plugin styles -->
+		<link rel="stylesheet" href="__PUBLIC__/assets/css/jquery-ui.css" />
+		<!-- text fonts -->
+		<link rel="stylesheet" href="__PUBLIC__/assets/css/ace-fonts.css" />
+		<!-- ace styles -->
+		<link rel="stylesheet" href="__PUBLIC__/assets/css/ace.css" class="ace-main-stylesheet" id="main-ace-style" />
+
+		<!--[if lte IE 9]>
+			<link rel="stylesheet" href="/assets/css/ace-part2.css" class="ace-main-stylesheet" />
+		<![endif]-->
+
+		<!--[if lte IE 9]>
+		  <link rel="stylesheet" href="/assets/css/ace-ie.css" />
+		<![endif]-->
+		<link rel="stylesheet" href="__PUBLIC__/assets/css/datepicker.css"/>
+<link rel="stylesheet" href="__PUBLIC__/assets/css/popup.css" type="text/css"/>
+<link rel="stylesheet" href="__PUBLIC__/assets/css/define.css" type="text/css"/>
+<link rel="stylesheet" href="__PUBLIC__/assets/css/aero.css" type="text/css"/>
+
+<link rel="stylesheet" href="__PUBLIC__/assets/css/bootstrap-timepicker.css" />
+<style>
+	.chosen-container{float:left;margin-right:4px;margin-top:1px;}
+	.pd{padding:0 4px;}
+</style>
+
+		<!-- HTML5shiv and Respond.js for IE8 to support HTML5 elements and media queries -->
+
+		<!--[if lte IE 8]>
+		<script src="/assets/js/html5shiv.js"></script>
+		<script src="/assets/js/respond.js"></script>
+		<![endif]-->
+	</head>
+	<body>
+	<div class="page-content">
+<h3 class="header smaller lighter blue overflow">联络记录</h3>
+
+<div>
+    <div id="dynamic-table_wrapper" class="dataTables_wrapper form-inline no-footer">
+        <div class="row pdb-10">
+            <form>
+                <div class="col-xs-12">
+                    <div id="table_filter">
+                    	<input type="hidden" value="0" id="timeType"/>
+                    	<input type="hidden" value="" id="userIds" name="userIds"/>
+	<select id="time_type" class="chosen-select form-control chzn-done pull-left" name="time_type" style="width: 94px;">
+		<option value="0">当天记录</option>
+		<option value="1">昨天记录</option>
+		<option value="7">最近一周</option>
+		<option value="30">最近一月</option>
+		<option value="99">某一天</option>
+		<option value="100">自定义</option>
+	</select>
+	<script>
+	    
+	
+	  $(function(){
+										     
+					$('#time_type').blur(function(){
+											   
+												var num = $("#time_type option:selected").val();
+												var autoDefinition = document.getElementById("autoDefinition");
+												var someday = document.getElementById("someday");
+												
+											    if(num == 100){
+												  autoDefinition.style.display = "block";
+												  someday.style.display = "none";
+												}else if(num == 99){
+												  someday.style.display = "block";
+												  autoDefinition.style.display = "none";
+												}
+												else{
+												  autoDefinition.style.display = "none";
+												  someday.style.display = "none";
+												}
+					})
+		})
+	
+	</script>
+<!--这是某一天的时间-->	
+	<div id = "someday" class="dateDiv pull-left" style="width:140px;display:none;margin-right:4px;">
+					<div class="input-group">
+						<input type="text"  class="form-control" id="startDate" name="startDate" >
+						<span class="input-group-addon">
+							<i class="fa fa-calendar bigger-110"></i>
+						</span>
+					</div>
+	</div>
+<!--这是从一段时间到另一段时间的记录-->    
+	<div id = "autoDefinition" class="rangeDateDiv pull-left " style="width:454px;display:none;">
+		<div>
+			<label class="control-label pull-left  no-padding-right mt-6">开始：</label>
+			<div class="input-group pull-left" style="width:186px;">
+                <input id="startDate" name="startDate" type="text" class="form-control" />
+				<span class="input-group-addon">
+					<i class="fa fa-clock-o bigger-110"></i>
+				</span>
+			</div>
+			<label class="control-label no-padding-right pull-left mt-6">结束：</label>
+			<div class="input-group pull-left" style="width:186px;">
+                <input id="endDate" name="endDate" type="text" class="form-control" />
+				<span class="input-group-addon">
+					<i class="fa fa-clock-o bigger-110"></i>
+				</span>
+			</div>
+		</div>
+	</div>
+                        <select id="_contact_result" class="form-control chosen-select chzn-done pull-left" name="contactResult" style="width: 120px;">
+                            <option value="" selected="selected">全部结果</option>
+                            <option value="18"  >已成交</option>
+                            <option value="16"  >禁止呼叫</option>
+                            <option value="15"  >已拒绝销售</option>
+                            <option value="14"  >已拒绝访问</option>
+                            <option value="12"  >考虑购买</option>
+                            <option value="11"  >待回访</option>
+                        </select>
+                        <input type="search" class="form-control pull-left" name="channelNumber" placeholder="联系号码" style="width:100px;" value="">
+                        <input type="search" class="form-control pull-left" name="accountName" placeholder="客户姓名" style="width:100px;" value="">
+                        <div class="btn-group">
+                            <button class="btn btn-info btn-sm btn-s less_btn" type="submit" id="campaign_btn">查询</button>
+                            <a class="btn btn-info btn-sm btn-s export" onclick="return csvExport(0);" href="">CSV导出</a>
+                            <a class="btn btn-info btn-sm btn-s "  href="javascript:recordExport(0,'/reporting/contact_histories/record_package?userIds=&startTime=2016-09-11 00:00:00.000&endTime=2016-09-11 23:59:59.999&tenantId=25362&contactResult=&channelNumber=&accountName=&userId=&time_type=0');">导出录音</a>
+                       
+                        </div>
+
+                    </div>
+            </form>
+        </div>
+    </div>
+    <div class="table1">
+        <div>
+            <table id="callLossContent" class="table dataTable table-striped table-bordered table-hover">
+                <thead>
+                <tr role="row">
+                    <th>联络时间</th>
+                    <th>联络方向</th>
+                    <th>客户姓名</th>
+                    <th>坐席</th>
+                    <th>联系号码</th>
+                    <th>联络事项</th>
+                    <th>联络结果</th>
+                    <th>联络小结</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+	
+<!--分页显示区-->	
+<div class="row">
+	<div class="col-xs-6">
+		<div class="dataTables_info" id="dynamic-table_info" role="status" aria-live="polite">共0条 </div>
+	</div>
+	<div class="col-xs-6">
+		<div class="dataTables_paginate paging_simple_numbers" id="dynamic-table_paginate">
+			<ul class="pagination">
+				<!-- 首页 -->
+				<!-- 上一页 -->
+	                <li class="paginate_button previous disabled"><a href="javascript:void(0)">上一页</a></li>               
+				<!-- 不能全部显示 -->
+				<!-- ... -->
+	         
+	                    <!-- 当前页 -->
+	                   <li></li>
+	                 
+	                	<li> </li>	                	          	
+	                 
+				<!-- ... --> 
+	           
+				<!-- 下一页 -->
+		            <li class="paginate_button previous disabled"><a href="javascript:void(0)">下一页</a></li> 
+				<!-- 尾页 -->
+			</ul>									
+		</div>
+	</div>
+</div>
+
+</div>
+
+<div id="dialog-listen" class="hide text-center"></div>
+  
+</body>
+	<!-- basic scripts -->
+
+	<!--[if !IE]> -->
+	
+
+	<!-- <![endif]-->
+
+	<!--[if IE]>
+<script src="/assets/js/jquery1x.js"></script>
+<![endif]-->
+	<script src="__PUBLIC__/assets/js/bootstrap.js"></script>
+	<script src="__PUBLIC__/assets/js/jquery-ui.js"></script>
+	<!-- page specific plugin scripts -->
+	<script src="__PUBLIC__/assets/js/jquery-ui.custom.js"></script>
+	<script src="__PUBLIC__/assets/js/jquery.ui.touch-punch.js"></script>
+	<!--<script src="/assets/assets/js/ace/elements.aside.js"></script>-->
+<script src="__PUBLIC__/assets/ty_js/agentstatistics/artDialog.min.js"></script>
+<script src="__PUBLIC__/assets/ty_js/agentstatistics/artDialog.plugins.min.js"></script>
+<script src="__PUBLIC__/assets/js/ace/ace.js"></script>
+<script src="__PUBLIC__/assets/js/jquery-ui.js"></script>
+<script src="__PUBLIC__/assets/js/chosen.jquery.js"></script>
+
+<script src="__PUBLIC__/assets/ty_js/checkDate.js"></script>
+
+
+<script src="__PUBLIC__/assets/ty_js/getRangeTime.js"></script>
+<script src="__PUBLIC__/assets/ty_js/contactHistory/contactHistory.js"></script>
+</html>

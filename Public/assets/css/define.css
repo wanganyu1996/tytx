@@ -1,0 +1,80 @@
+html{background:#fff;}
+#notice .widget-title .icon,#tdList .widget-title .icon{padding:0 10px;margin-right:6px;display:inline-block;height:38px;border-right:solid 1px #ccc;}
+#notice .widget-title .label,#tdList .widget-title .label {
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    padding: 3px 5px 2px;
+    float: right;
+    margin: 9px 15px 0 0;
+    background-color: #f89406;
+    box-shadow:none;
+}
+#notice .widget-title a,#tdList .widget-title a{color:#337ab7;}
+#notice .widget-title,#tdList .widget-title{background:none;border-bottom:none;}
+#notice .widget-title .label a,#tdList .widget-title .label a{color:#fff;}
+#notice .widget-header,#tdList .widget-header{padding-left:0;}
+#notice li,#tdList li{position:relative;padding:5px 10px;}
+#notice h6,#tdList h6{font-size:14px;font-weight:normal;margin:0;}
+#notice h6 small,#tdList h6 small{margin-top:4px;}
+#notice p,#tdList p{margin:6px 0 0;}
+#notice .detail,#tdList .detail{position:absolute;bottom:8px;right:8px;}
+ul.recent-posts{margin:0;}
+.overflow{overflow:hidden;}
+
+.table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td{vertical-align: middle;}
+.mr-4{margin-right:4px;}
+.mr-16{margin-right:16px;}
+.btn-group > .btn-s, .btn-group + .btn-s{border-width:4px;}
+label.mt-6{margin-top:6px;}
+#dynamic-table th{color:#393939;}
+.dataTables_wrapper .row:first-child{padding-bottom:0px;}
+
+/*bootstrap default modal*/
+#formModal{width:400px;position:fixed;left:50%;top:20%;margin-left:-200px;}
+#formModal .modal-body{background:#fff;}
+#formModal .modal-body .form-group{width:100%;}
+#formModal .modal-header{overflow:hidden;height:38px;}
+#formModal .modal-title{line-height:1;color:#669fc7;font-size:17px;}
+#formModal .close{font-size:24px;margin-top:-8px;color:#8b9aa3;font-weight:bold;opacity:.4;filter:alpha(opacity=40);}
+#formModal h4{margin-top:-4px;}
+
+#pwdModal{width:500px;height:300px;position:fixed;left:50%;top:20%;margin-left:-250px;}
+#pwdModal .modal-body{background:#fff;}
+#pwdModal .modal-body .form-group{width:100%;}
+#pwdModal .modal-header{overflow:hidden;height:38px;}
+#pwdModal .modal-title{line-height:1;color:#669fc7;font-size:17px;}
+#pwdModal .close{font-size:24px;margin-top:-8px;color:#8b9aa3;font-weight:bold;opacity:.4;filter:alpha(opacity=40);}
+
+/*chart*/
+#chartFormModal{}
+#chartFormModal .modal-body{background:#fff;}
+#chartFormModal .modal-body .form-group{width:100%;}
+#chartFormModal .modal-header{overflow:hidden;height:38px;}
+#chartFormModal .modal-title{line-height:1;color:#669fc7;font-size:17px;}
+#chartFormModal .close{font-size:24px;margin-top:-8px;color:#8b9aa3;font-weight:bold;opacity:.4;filter:alpha(opacity=40);}
+#formModalLabel{margin:-10px 0 0;}
+
+#formModal .close:hover,#pwdModal .close:hover,#chartFormModal .close:hover{opacity:1;filter:alpha(opacity=100);}
+.dataTables_wrapper .pdb-10:first-child{padding-bottom:12px;}
+
+.bootstrap-datetimepicker-widget td{text-align:center;}
+
+#popModal{width:600px;min-height:500px;position:fixed;left:50%;top:20%;margin-left:-300px;}
+#popModal .modal-body{background:#fff;}
+#popModal .modal-body .form-group{width:100%;}
+#popModal .modal-header{overflow:hidden;height:38px;}
+#popModal .modal-title{line-height:1;color:#669fc7;font-size:17px;}
+#popModal .close{font-size:24px;margin-top:-8px;color:#8b9aa3;font-weight:bold;opacity:.4;filter:alpha(opacity=40);}
+#popModal .modal-body .form-group{overflow:auto;zoom:1;}
+#popModal .control-label{padding-top:5px;}
+
+
+.modalstyle{width:600px;min-height:500px;position:fixed;left:50%;top:20%;margin-left:-300px;}
+.modalstyle .modal-body{background:#fff;}
+.modalstyle .modal-body .form-group{width:100%;line-height:25px;margin-bottom:5px;}
+.modalstyle .modal-header{overflow:hidden;height:38px;}
+.modalstyle .modal-title{line-height:1;color:#669fc7;font-size:17px;}
+.modalstyle .close{font-size:24px;margin-top:-8px;color:#8b9aa3;font-weight:bold;opacity:.4;filter:alpha(opacity=40);}
+
+.modal-body .form-group:after{content:'';clear:both;display:block;font-size:0;line-height:0;}

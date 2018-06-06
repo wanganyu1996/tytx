@@ -10,4 +10,6 @@
 ![](https://github.com/wanganyu1996/tytx/blob/master/docs/6.jpg)
 ![](https://github.com/wanganyu1996/tytx/blob/master/docs/7.jpg)
 ![](https://github.com/wanganyu1996/tytx/blob/master/docs/8.jpg)
+![](https://github.com/wanganyu1996/tytx/blob/master/docs/9.jpg)
+![](https://github.com/wanganyu1996/tytx/blob/master/docs/10.jpg)
 
